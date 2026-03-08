@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Editor Commessa Nadara - Task Force</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --primary: #2c3e50; --accent: #2980b9; --secondary: #27ae60; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        
+        /* Area Input - Non verrà stampata */
+        .editor-panel { 
+            background: white; padding: 20px; margin-bottom: 30px; border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 5px solid var(--accent);
+        }
+        .editor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .editor-panel h3 { margin-top: 0; color: var(--accent); }
+        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
+        input { width: 92%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+
+        /* Area PDF */
+        #pdf-content { background: white; padding: 40px; width: 1200px; margin: auto; border-radius: 5px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 15px; }
+        
+        .logo img { 
+            max-height: 70px; 
+            max-width: 250px;
+            object-fit: contain;
+        }
+        
+        /* Organigramma */
+        .org-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 25px 0; }
+        .card { border: 1px solid #ddd; padding: 12px; border-radius: 4px; text-align: center; background: #fff; }
+        .card.top { grid-column: span 4; background: var(--primary); color: white; }
+        .card.sup { grid-column: span 4; background: var(--accent); color: white; margin-bottom: 10px; }
+        .card h4 { margin: 5px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .name-display { font-weight: bold; font-size: 16px; color: #d35400; min-height: 1.2em; }
+        .card.top .name-display, .card.sup .name-display { color: #f1c40f; }
+
+        /* Gantt Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
+        th, td { border: 1px solid #dee2e6; padding: 10px; text-align: center; font-size: 12px; }
+        th { background: #f8f9fa; color: var(--primary); }
+        .task-col { text-align: left; font-weight: bold; width: 280px; }
+        .resp-col { width: 150px; font-style: italic; }
+        
+        /* Progress Bar */
+        .bar-container { background: #eee; border-radius: 10px; height: 20px; position: relative; overflow: hidden; }
+        .bar { height: 100%; color: white; font-size: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+
+        .btn-box { text-align: center; margin-top: 30px; }
+        .btn { padding: 15px 40px; background: var(--secondary); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .btn:hover { background: #219150; transform: translateY(-2px); }
+
+        @media print { .editor-panel, .btn-box { display: none; } }
+    </style>
+</head>
+<body>
+
+<div class="editor-panel">
+    <h3>⚙️ Configurazione Team Progetto (Input campi)</h3>
+    <div class="editor-grid">
+        <div><label>Project Manager (PM)</label><input type="text" id="in-pm" oninput="update()" placeholder="Nome e Cognome"></div>
+        <div><label>Supervisore Tecnico</label><input type="text" id="in-sup" oninput="update()" placeholder="Nome e Cognome"></div>
+        <div><label>Lead Unit 1 - Iron (CT)</label><input type="text" id="in-u1" oninput="update()" placeholder="Nome e Cognome"></div>
+        <div><label>Lead Unit 2 - Zasa (PA)</label><input type="text" id="in-u2" oninput="update()" placeholder="Nome e Cognome"></div>
+        <div><label>Lead Unit 3 - Capofeto (TP)</label><input type="text" id="in-u3" oninput="update()" placeholder="Nome e Cognome"></div>
+        <div><label>Lead Unit 4 - Leonacco (UD)</label><input type="text" id="in-u4" oninput="update()" placeholder="Nome e Cognome"></div>
+    </div>
+</div>
+
+<div id="pdf-content">
+    <div class="header">
+        <div class="logo">
+            <img src="logo.png" alt="Logo Azienda" onerror="this.src='https://via.placeholder.com/250x70?text=CARICA+LOGO.PNG'">
+        </div>
+        <div style="text-align:right">
+            <h1 style="margin:0; color:var(--primary)">Gestione Commessa: Cluster Nadara (85 MW)</h1>
+            <p style="margin:5px 0; color:#666">Task-Force Ingegneria Esecutiva | 14 Settimane (W10 - W24)</p>
+        </div>
+    </div>
+
+    <div class="org-grid">
+        <div class="card top"><h4>Team PM Centrale</h4><div id="out-pm" class="name-display">Richiesto</div></div>
+        <div class="card sup"><h4>Supervisore Tecnico Senior</h4><div id="out-sup" class="name-display">Richiesto</div></div>
+        <div class="card"><h4>Unit 1: Iron (CT)</h4><div id="out-u1" class="name-display">-</div></div>
+        <div class="card"><h4>Unit 2: V. di Zasa (PA)</h4><div id="out-u2" class="name-display">-</div></div>
+        <div class="card"><h4>Unit 3: Capofeto (TP)</h4><div id="out-u3" class="name-display">-</div></div>
+        <div class="card"><h4>Unit 4: Leonacco (UD)</h4><div id="out-u4" class="name-display">-</div></div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="task-col">Fase / Attività Critica</th>
+                <th class="resp-col">Responsabile</th>
+                <th>Progressione Temporale (14 Settimane)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="task-col">Coord. Generale & Reporting Mary/Altenia</td>
+                <td id="row-pm" class="resp-col">-</td>
+                <td><div class="bar-container"><div class="bar" style="width:100%; background:var(--primary)">W10 - W24</div></div></td>
+            </tr>
+            <tr>
+                <td class="task-col">Validazione Standard & Interfaccia Terna</td>
+                <td id="row-sup" class="resp-col">-</td>
+                <td><div class="bar-container"><div class="bar" style="width:100%; background:var(--accent)">SUPERVISIONE TECNICA</div></div></td>
+            </tr>
+            <tr>
+                <td class="task-col">Esecutivo & Idraulica (Catania)</td>
+                <td id="row-u1" class="resp-col">-</td>
+                <td><div class="bar-container"><div class="bar" style="width:85%; background:#e67e22">UNIT 1 - PARALLEL TRACK</div></div></td>
+            </tr>
+            <tr>
+                <td class="task-col">Esecutivo & Infrastrutture (Palermo)</td>
+                <td id="row-u2" class="resp-col">-</td>
+                <td><div class="bar-container"><div class="bar" style="width:85%; background:#3498db">UNIT 2 - PARALLEL TRACK</div></div></td>
+            </tr>
+            <tr>
+                <td class="task-col">Esecutivo Agro-FV & Paesaggio (Trapani)</td>
+                <td id="row-u3" class="resp-col">-</td>
+                <td><div class="bar-container"><div class="bar" style="width:75%; background:#9b59b6">UNIT 3 - FOCUS AGRO</div></div></td>
+            </tr>
+            <tr>
+                <td class="task-col">Esecutivo Strutture & Permitting (Udine)</td>
+                <td id="row-u4" class="resp-col">-</td>
+                <td><div class="bar-container"><div class="bar" style="width:75%; background:#1abc9c">UNIT 4 - FOCUS ESE</div></div></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="btn-box">
+    <button class="btn" onclick="generatePDF()">📥 Genera Offerta Tecnica (PDF A3)</button>
+</div>
+
+<script>
+    function update() {
+        const ids = ['pm', 'sup', 'u1', 'u2', 'u3', 'u4'];
+        ids.forEach(id => {
+            const val = document.getElementById('in-' + id).value || '-';
+            document.getElementById('out-' + id).innerText = val;
+            document.getElementById('row-' + id).innerText = val;
+            localStorage.setItem('nadara-png-' + id, val);
+        });
+    }
+
+    window.onload = () => {
+        const ids = ['pm', 'sup', 'u1', 'u2', 'u3', 'u4'];
+        ids.forEach(id => {
+            const saved = localStorage.getItem('nadara-png-' + id);
+            if (saved && saved !== '-') {
+                document.getElementById('in-' + id).value = saved;
+            }
+        });
+        update();
+    }
+
+    function generatePDF() {
+        const element = document.getElementById('pdf-content');
+        const opt = {
+            margin: 10,
+            filename: 'Organigramma_TaskForce_Nadara.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
+
+</body>
+</html>
