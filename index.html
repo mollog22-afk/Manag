@@ -3,186 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <title>Offerta Tecnica - No.Do. e Servizi Srl</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root { --primary: #1a3a5a; --accent: #2980b9; --bg: #525659; }
+        :root { --primary: #1a3a5a; --accent: #2980b9; }
         
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; }
+        /* Layout Schermo */
+        body { font-family: 'Segoe UI', sans-serif; background: #525659; margin: 0; padding: 20px; }
         
-        /* Pannello di controllo superiore */
-        .no-print { background: #fff; padding: 20px; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .grid-inputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 1200px; margin: auto; }
-        input { width: 90%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        label { font-size: 11px; font-weight: bold; color: var(--primary); text-transform: uppercase; }
-
-        /* Contenitore PDF */
-        #pdf-container { background: transparent; width: 100%; display: flex; flex-direction: column; align-items: center; }
-        
-        /* PAGINA A4 VERTICALE */
-        .page-v { 
-            background: white; 
-            width: 210mm; 
-            height: 296mm; 
-            padding: 20mm; 
-            margin: 10px 0;
-            box-sizing: border-box; 
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        .no-print-panel { 
+            background: white; padding: 20px; max-width: 1000px; margin: 0 auto 20px auto; 
+            border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* PAGINA A3 ORIZZONTALE (CRONOPROGRAMMA) */
-        .page-h { 
-            background: white; 
-            width: 420mm; 
-            height: 296mm; 
-            padding: 15mm; 
-            margin: 10px 0;
-            box-sizing: border-box; 
+        /* CONFIGURAZIONE PAGINE PER STAMPA/PDF */
+        @page { margin: 0; }
+        
+        .page {
+            background: white;
+            display: block;
+            margin: 10px auto;
+            box-sizing: border-box;
+            padding: 20mm;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
-        /* Elementi grafici interni */
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 30px; }
-        .logo img { max-height: 60px; }
-        .header-info { text-align: right; font-size: 11px; color: #666; }
+        /* FORMATO A4 VERTICALE */
+        .a4-v { width: 210mm; height: 296mm; }
 
-        .letter-content { line-height: 1.6; font-size: 14px; color: #333; text-align: justify; }
-        .recipient { margin-bottom: 40px; }
-        .subject { font-weight: bold; text-decoration: underline; margin-bottom: 30px; }
+        /* FORMATO A3 ORIZZONTALE */
+        .a3-h { width: 420mm; height: 296mm; padding: 15mm; }
 
-        .org-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 40px; }
-        .org-card { border: 1px solid var(--primary); padding: 15px; border-radius: 5px; text-align: center; }
-        .full { grid-column: span 2; background: var(--primary); color: white; }
-        .name-tag { display: block; font-weight: bold; font-size: 18px; margin-top: 5px; color: var(--accent); }
-        .full .name-tag { color: #f1c40f; }
-
-        /* Tabella Gantt Scalata */
-        .gantt-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; table-layout: fixed; }
-        .gantt-table th, .gantt-table td { border: 1px solid #ddd; padding: 12px 5px; text-align: center; }
-        .task-name { text-align: left; width: 300px; font-weight: bold; }
-        .gantt-bar { height: 22px; background: var(--accent); border-radius: 11px; color: white; font-size: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-
-        .btn-dl { display: block; margin: 20px auto; padding: 15px 30px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; font-weight: bold; }
-
-        /* Forzatura per il motore di stampa */
         @media print {
-            .no-print { display: none; }
-            body { background: none; }
-            .page-v, .page-h { margin: 0; box-shadow: none; page-break-after: always; }
+            body { background: none; padding: 0; }
+            .no-print-panel { display: none; }
+            .page { margin: 0; border: none; box-shadow: none; page-break-after: always; }
+            /* Forza l'orientamento orizzontale per la pagina A3 */
+            .a3-h { page-break-before: always; }
+        }
+
+        /* Elementi Grafici */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 30px; }
+        .logo img { max-height: 60px; }
+        .header-info { text-align: right; font-size: 12px; color: #444; }
+
+        .letter-content { line-height: 1.6; font-size: 15px; text-align: justify; }
+        .subject { font-weight: bold; text-decoration: underline; margin: 25px 0; }
+
+        .org-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .org-card { border: 1px solid #ccc; padding: 15px; text-align: center; border-radius: 5px; }
+        .full { grid-column: span 2; background: var(--primary); color: white; }
+        .name-display { display: block; font-weight: bold; font-size: 18px; color: var(--accent); margin-top: 5px; }
+        .full .name-display { color: #f1c40f; }
+
+        /* Tabella Gantt A3 */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
+        th, td { border: 1px solid #aaa; padding: 10px; text-align: center; font-size: 13px; }
+        th { background: #f0f0f0; }
+        .task-col { text-align: left; width: 320px; font-weight: bold; }
+        .gantt-bar { height: 24px; background: var(--accent); border-radius: 12px; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+
+        .btn-print { 
+            background: #27ae60; color: white; border: none; padding: 15px 30px; 
+            font-size: 18px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%;
         }
     </style>
 </head>
 <body>
 
-<div class="no-print">
-    <div class="grid-inputs">
-        <div><label>Project Manager</label><input type="text" id="in-pm" oninput="upd()"></div>
-        <div><label>Supervisore Tecnico</label><input type="text" id="in-sup" oninput="upd()"></div>
-        <div><label>Resp. Civile</label><input type="text" id="in-civ" oninput="upd()"></div>
-        <div><label>Resp. Elettrico</label><input type="text" id="in-ele" oninput="upd()"></div>
-        <div><label>Agronomo</label><input type="text" id="in-agro" oninput="upd()"></div>
-        <div><label>Azienda</label><input type="text" id="in-myco" oninput="upd()" value="No.Do. e Servizi Srl"></div>
+<div class="no-print-panel">
+    <h3 style="margin-top:0">Compila i dati dell'offerta</h3>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom:20px">
+        <input type="text" id="in-pm" placeholder="Nome Project Manager" oninput="sync()">
+        <input type="text" id="in-sup" placeholder="Nome Supervisore" oninput="sync()">
+        <input type="text" id="in-civ" placeholder="Responsabile Civile" oninput="sync()">
+        <input type="text" id="in-ele" placeholder="Responsabile Elettrico" oninput="sync()">
+        <input type="text" id="in-agro" placeholder="Agronomo" oninput="sync()">
+        <button class="btn-print" onclick="window.print()">🖨️ GENERA PDF / STAMPA</button>
     </div>
-    <button class="btn-dl" onclick="exportPDF()">📥 GENERA PDF PROFESSIONALE (A4 + A3)</button>
+    <p style="font-size:12px; color:red">Nota: Nella finestra di stampa, seleziona "Salva come PDF". Se il cronoprogramma è tagliato, verifica che "Grafica di sfondo" sia attivo.</p>
 </div>
 
-<div id="pdf-container">
-    
-    <div class="page-v" id="p1">
+<div id="documento">
+    <div class="page a4-v">
         <div class="header">
             <div class="logo"><img src="logo.png" onerror="this.src='https://via.placeholder.com/200x60?text=LOGO+PNG'"></div>
             <div class="header-info"><strong>No.Do. e Servizi Srl</strong><br>Data: 08/03/2026</div>
         </div>
         <div class="letter-content">
-            <div class="recipient">Spett.le <strong>Altenia S.r.l.</strong><br>Alla c.a. di Annabarbara Baldacchino</div>
+            <p>Spett.le <strong>Altenia S.r.l.</strong><br>Alla c.a. di Annabarbara Baldacchino</p>
             <div class="subject">Oggetto: Proposta Tecnica per Ingegneria Esecutiva – Cluster Nadara (85 MWp)</div>
-            <p>Gentile Annabarbara Baldacchino, con riferimento alla procedura di gara per l'affidamento dei servizi di ingegneria esecutiva relativi ai siti del Cluster Nadara, siamo lieti di sottoporre la nostra migliore offerta.</p>
-            <p>La nostra proposta risponde alla tempistica di 14 settimane, con una task-force dedicata capace di gestire simultaneamente i 4 siti, con focus su secondary permitting e ottimizzazione Cut&Fill.</p>
-            <p>In allegato l'Organigramma e il Cronoprogramma allineato alla Document List Rev.03.</p>
-            <p>Cordiali saluti,</p><br>
-            <p><strong id="out-pm-sig">-</strong><br>Per No.Do. e Servizi Srl - L'Amministratore Ing. Francesco Guido</p>
+            <p>Gentile Annabarbara Baldacchino,</p>
+            <p>con riferimento alla procedura di gara per l'affidamento dei servizi di ingegneria esecutiva relativi ai siti del Cluster Nadara, siamo lieti di sottoporre la nostra migliore offerta.</p>
+            <p>La nostra proposta garantisce la copertura di tutte le specialità richieste in 14 settimane, con una task-force dedicata per gestire simultaneamente i 4 siti del Cluster.</p>
+            <p>Cordiali saluti,</p><br><br>
+            <p><strong><span id="out-pm-sig">-</span></strong><br>Per No.Do. e Servizi Srl - L'Amministratore Ing. Francesco Guido</p>
         </div>
     </div>
 
-    <div class="page-v" id="p2">
+    <div class="page a4-v">
         <div class="header">
             <div class="logo"><img src="logo.png" onerror="this.src='https://via.placeholder.com/200x60?text=LOGO+PNG'"></div>
             <div class="header-info">Allegato A: Organigramma di Progetto</div>
         </div>
-        <h2 style="color:var(--primary); text-align:center;">Task Force Specialistica</h2>
+        <h2 style="text-align:center; color:var(--primary)">Task Force Specialistica</h2>
         <div class="org-grid">
-            <div class="org-card full"><small>PROJECT MANAGER</small><span class="name-tag" id="out-pm">-</span></div>
-            <div class="org-card full" style="background:#f8f9fa;"><small>SUPERVISORE TECNICO</small><span class="name-tag" id="out-sup">-</span></div>
-            <div class="org-card"><small>RESP. CIVILE</small><span class="name-tag" id="out-civ">-</span></div>
-            <div class="org-card"><small>RESP. ELETTRICO</small><span class="name-tag" id="out-ele">-</span></div>
-            <div class="org-card"><small>AGRONOMO</small><span class="name-tag" id="out-agro">-</span></div>
-            <div class="org-card"><small>DISEGNATORI CAD</small><span class="name-tag">3-4 Risorse</span></div>
+            <div class="org-card full"><small>PROJECT MANAGER</small><span id="out-pm" class="name-display">-</span></div>
+            <div class="org-card full" style="background:#f9f9f9"><small>SUPERVISORE TECNICO</small><span id="out-sup" class="name-display">-</span></div>
+            <div class="org-card"><small>RESP. CIVILE</small><span id="out-civ" class="name-display">-</span></div>
+            <div class="org-card"><small>RESP. ELETTRICO</small><span id="out-ele" class="name-display">-</span></div>
+            <div class="org-card"><small>AGRONOMO</small><span id="out-agro" class="name-display">-</span></div>
+            <div class="org-card"><small>DISEGNATORI CAD</small><span class="name-display">3-4 Risorse</span></div>
         </div>
     </div>
 
-    <div class="page-h" id="p3">
+    <div class="page a3-h">
         <div class="header">
             <div class="logo"><img src="logo.png" onerror="this.src='https://via.placeholder.com/200x60?text=LOGO+PNG'"></div>
-            <div class="header-info">Allegato B: Cronoprogramma Esecutivo (W10 - W24)</div>
+            <div class="header-info">Allegato B: Cronoprogramma (Rif. 25_1587)</div>
         </div>
-        <h2 style="color:var(--primary);">Gantt Allineato Document List Rev.03 (Rif. 25_1587)</h2>
-        <table class="gantt-table">
+        <h2 style="color:var(--primary)">Gantt Esecutivo - Cluster Nadara</h2>
+        <table>
             <thead>
                 <tr>
-                    <th class="task-name">Macro-Fase</th>
+                    <th class="task-col">Macro-Attività</th>
                     <script>for(let i=10; i<=24; i++) document.write(`<th>W${i}</th>`);</script>
                 </tr>
             </thead>
             <tbody>
-                <tr><td class="task-name">Setup & Ingegneria Generale</td><td colspan="3"><div class="gantt-bar">SETUP</div></td><td colspan="12"></td></tr>
-                <tr><td class="task-name">Ing. Civile (Idraulica, C&F)</td><td colspan="2"></td><td colspan="8"><div class="gantt-bar" style="background:#d35400">DESIGN</div></td><td colspan="5"></td></tr>
-                <tr><td class="task-name">Ing. Elettrica (Schemi, SCADA)</td><td colspan="4"></td><td colspan="8"><div class="gantt-bar" style="background:#2980b9">ELECTRICAL</div></td><td colspan="3"></td></tr>
-                <tr><td class="task-name">Permitting (Enti, VVF)</td><td colspan="9"></td><td colspan="4"><div class="gantt-bar" style="background:#8e44ad">ASSERVERAZIONI</div></td><td colspan="2"></td></tr>
+                <tr><td class="task-col">Setup & Ingegneria Generale</td><td colspan="3"><div class="gantt-bar">PRE-DESIGN</div></td><td colspan="12"></td></tr>
+                <tr><td class="task-col">Ing. Civile (Idraulica, C&F, Strutture)</td><td colspan="2"></td><td colspan="8"><div class="gantt-bar" style="background:#d35400">ESECUTIVO CIVILE</div></td><td colspan="5"></td></tr>
+                <tr><td class="task-col">Ing. Elettrica (Schemi, SCADA, MT)</td><td colspan="4"></td><td colspan="8"><div class="gantt-bar" style="background:#2980b9">ESECUTIVO ELE</div></td><td colspan="3"></td></tr>
+                <tr><td class="task-col">Secondary Permitting & Asseverazioni</td><td colspan="9"></td><td colspan="4"><div class="gantt-bar" style="background:#8e44ad">ENTI</div></td><td colspan="2"></td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    function upd() {
-        const fields = { 'pm': ['out-pm', 'out-pm-sig'], 'sup': ['out-sup'], 'civ': ['out-civ'], 'ele': ['out-ele'], 'agro': ['out-agro'] };
-        for (let key in fields) {
-            let val = document.getElementById('in-' + key).value || '-';
-            fields[key].forEach(id => document.getElementById(id).innerText = val);
-        }
-    }
-
-    async function exportPDF() {
-        const optA4 = {
-            margin: 0,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-
-        const optA3 = {
-            margin: 0,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape' }
-        };
-
-        const pdf = new jspdf.jsPDF(optA4.jsPDF);
-
-        // Pagina 1 e 2 (A4)
-        await html2pdf().set(optA4).from(document.getElementById('p1')).toContainer().toCanvas().toImg().toPdf(pdf);
-        pdf.addPage('a4', 'portrait');
-        await html2pdf().set(optA4).from(document.getElementById('p2')).toContainer().toCanvas().toImg().toPdf(pdf);
-        
-        // Pagina 3 (A3 Orizzontale)
-        pdf.addPage('a3', 'landscape');
-        const p3 = document.getElementById('p3');
-        await html2pdf().set(optA3).from(p3).toContainer().toCanvas().toImg().toPdf(pdf);
-
-        pdf.save('Offerta_Nadara_NoDo_Servizi.pdf');
+    function sync() {
+        const ids = ['pm', 'sup', 'civ', 'ele', 'agro'];
+        ids.forEach(id => {
+            const val = document.getElementById('in-' + id).value || '-';
+            const out = document.getElementById('out-' + id);
+            if(out) out.innerText = val;
+            if(id === 'pm') document.getElementById('out-pm-sig').innerText = val;
+        });
     }
 </script>
 </body>
