@@ -2,174 +2,172 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Editor Commessa Nadara - Task Force</title>
+    <title>Offerta Tecnica - Cluster Nadara</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root { --primary: #2c3e50; --accent: #2980b9; --secondary: #27ae60; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        :root { --primary: #1a3a5a; --accent: #2980b9; --success: #27ae60; --bg: #f4f7f9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
         
-        /* Area Input - Non verrà stampata */
-        .editor-panel { 
-            background: white; padding: 20px; margin-bottom: 30px; border-radius: 8px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 5px solid var(--accent);
-        }
-        .editor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .editor-panel h3 { margin-top: 0; color: var(--accent); }
-        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
-        input { width: 92%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        /* Pannello di Controllo (non stampato) */
+        .no-print { background: white; padding: 20px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-top: 4px solid var(--accent); }
+        .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        label { display: block; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+        input { width: 90%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
 
-        /* Area PDF */
-        #pdf-content { background: white; padding: 40px; width: 1200px; margin: auto; border-radius: 5px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 15px; }
-        
-        .logo img { 
-            max-height: 70px; 
-            max-width: 250px;
-            object-fit: contain;
-        }
-        
+        /* Documento PDF */
+        #pdf-content { background: white; padding: 40px; width: 1250px; margin: auto; border-radius: 4px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 20px; }
+        .logo img { max-height: 70px; max-width: 250px; }
+        .project-info { text-align: right; }
+        .project-info h1 { margin: 0; color: var(--primary); font-size: 24px; }
+
         /* Organigramma */
-        .org-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 25px 0; }
-        .card { border: 1px solid #ddd; padding: 12px; border-radius: 4px; text-align: center; background: #fff; }
-        .card.top { grid-column: span 4; background: var(--primary); color: white; }
-        .card.sup { grid-column: span 4; background: var(--accent); color: white; margin-bottom: 10px; }
-        .card h4 { margin: 5px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .name-display { font-weight: bold; font-size: 16px; color: #d35400; min-height: 1.2em; }
-        .card.top .name-display, .card.sup .name-display { color: #f1c40f; }
+        .section-title { background: #eee; padding: 10px; font-weight: bold; margin: 30px 0 15px 0; border-left: 5px solid var(--primary); }
+        .org-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .org-box { border: 1px solid #ddd; padding: 15px; text-align: center; border-radius: 4px; }
+        .full-width { grid-column: span 4; background: var(--primary); color: white; }
+        .highlight { grid-column: span 4; background: var(--accent); color: white; }
+        .name-tag { font-weight: bold; font-size: 16px; margin-top: 5px; display: block; }
 
         /* Gantt Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
-        th, td { border: 1px solid #dee2e6; padding: 10px; text-align: center; font-size: 12px; }
-        th { background: #f8f9fa; color: var(--primary); }
-        .task-col { text-align: left; font-weight: bold; width: 280px; }
-        .resp-col { width: 150px; font-style: italic; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background: #f8f9fa; }
+        .task-name { text-align: left; width: 300px; font-weight: bold; }
         
-        /* Progress Bar */
-        .bar-container { background: #eee; border-radius: 10px; height: 20px; position: relative; overflow: hidden; }
-        .bar { height: 100%; color: white; font-size: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        /* Barre Progress */
+        .gantt-bar { height: 18px; border-radius: 9px; color: white; font-size: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .bg-gen { background: #7f8c8d; }
+        .bg-civ { background: #d35400; }
+        .bg-ele { background: #2980b9; }
 
-        .btn-box { text-align: center; margin-top: 30px; }
-        .btn { padding: 15px 40px; background: var(--secondary); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        .btn:hover { background: #219150; transform: translateY(-2px); }
-
-        @media print { .editor-panel, .btn-box { display: none; } }
+        .btn-export { display: block; margin: 20px auto; padding: 15px 40px; background: var(--success); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        @media print { .no-print, .btn-export { display: none; } }
     </style>
 </head>
 <body>
 
-<div class="editor-panel">
-    <h3>⚙️ Configurazione Team Progetto (Input campi)</h3>
-    <div class="editor-grid">
-        <div><label>Project Manager (PM)</label><input type="text" id="in-pm" oninput="update()" placeholder="Nome e Cognome"></div>
-        <div><label>Supervisore Tecnico</label><input type="text" id="in-sup" oninput="update()" placeholder="Nome e Cognome"></div>
-        <div><label>Lead Unit 1 - Iron (CT)</label><input type="text" id="in-u1" oninput="update()" placeholder="Nome e Cognome"></div>
-        <div><label>Lead Unit 2 - Zasa (PA)</label><input type="text" id="in-u2" oninput="update()" placeholder="Nome e Cognome"></div>
-        <div><label>Lead Unit 3 - Capofeto (TP)</label><input type="text" id="in-u3" oninput="update()" placeholder="Nome e Cognome"></div>
-        <div><label>Lead Unit 4 - Leonacco (UD)</label><input type="text" id="in-u4" oninput="update()" placeholder="Nome e Cognome"></div>
+<div class="no-print">
+    <h3>⚙️ Configurazione Team - Cluster Nadara</h3>
+    <div class="grid-inputs">
+        <div><label>Project Manager</label><input type="text" id="in-pm" oninput="upd()" placeholder="Nome"></div>
+        <div><label>Supervisore Tecnico</label><input type="text" id="in-sup" oninput="upd()" placeholder="Nome"></div>
+        <div><label>Responsabile Civile</label><input type="text" id="in-civ" oninput="upd()" placeholder="Nome"></div>
+        <div><label>Responsabile Elettrico</label><input type="text" id="in-ele" oninput="upd()" placeholder="Nome"></div>
+        <div><label>Resp. SSU/SCADA</label><input type="text" id="in-ssu" oninput="upd()" placeholder="Nome"></div>
+        <div><label>Agronomo</label><input type="text" id="in-agro" oninput="upd()" placeholder="Nome"></div>
     </div>
 </div>
 
 <div id="pdf-content">
     <div class="header">
-        <div class="logo">
-            <img src="logo.png" alt="Logo Azienda" onerror="this.src='https://via.placeholder.com/250x70?text=CARICA+LOGO.PNG'">
-        </div>
-        <div style="text-align:right">
-            <h1 style="margin:0; color:var(--primary)">Gestione Commessa: Cluster Nadara (85 MW)</h1>
-            <p style="margin:5px 0; color:#666">Task-Force Ingegneria Esecutiva | 14 Settimane (W10 - W24)</p>
+        <div class="logo"><img src="logo.png" alt="Logo" onerror="this.src='https://via.placeholder.com/200x70?text=LOGO.PNG'"></div>
+        <div class="project-info">
+            <h1>Offerta Tecnica: Cluster Nadara</h1>
+            <p>Progettazione Esecutiva | Week 10 - Week 24</p>
+            <p>Rif: 25_1587 Lista Documenti Rev.03</p>
         </div>
     </div>
 
-    <div class="org-grid">
-        <div class="card top"><h4>Team PM Centrale</h4><div id="out-pm" class="name-display">Richiesto</div></div>
-        <div class="card sup"><h4>Supervisore Tecnico Senior</h4><div id="out-sup" class="name-display">Richiesto</div></div>
-        <div class="card"><h4>Unit 1: Iron (CT)</h4><div id="out-u1" class="name-display">-</div></div>
-        <div class="card"><h4>Unit 2: V. di Zasa (PA)</h4><div id="out-u2" class="name-display">-</div></div>
-        <div class="card"><h4>Unit 3: Capofeto (TP)</h4><div id="out-u3" class="name-display">-</div></div>
-        <div class="card"><h4>Unit 4: Leonacco (UD)</h4><div id="out-u4" class="name-display">-</div></div>
+    <div class="section-title">ORGANIGRAMMA DI PROGETTO PER SPECIALITÀ</div>
+    <div class="org-container">
+        <div class="org-box full-width">
+            <small>Project Management & Interfaccia Altenia</small>
+            <span class="name-tag" id="out-pm">-</span>
+        </div>
+        <div class="org-box highlight">
+            <small>Supervisione Tecnica & Controllo Qualità</small>
+            <span class="name-tag" id="out-sup">-</span>
+        </div>
+        <div class="org-box">
+            <small>Spec. Civile & Strutture</small>
+            <span class="name-tag" id="out-civ">-</span>
+        </div>
+        <div class="org-box">
+            <small>Spec. Elettrico & Automazione</small>
+            <span class="name-tag" id="out-ele">-</span>
+        </div>
+        <div class="org-box">
+            <small>Ingegnere Sotto-Stazionista</small>
+            <span class="name-tag" id="out-ssu">-</span>
+        </div>
+        <div class="org-box">
+            <small>Agronomo Specialist</small>
+            <span class="name-tag" id="out-agro">-</span>
+        </div>
     </div>
 
+    <div class="section-title">CRONOPROGRAMMA LAVORI (Allineato Document List Rev.03)</div>
     <table>
         <thead>
             <tr>
-                <th class="task-col">Fase / Attività Critica</th>
-                <th class="resp-col">Responsabile</th>
-                <th>Progressione Temporale (14 Settimane)</th>
+                <th class="task-name">Disciplina / Gruppo Elaborati</th>
+                <th>Inizio</th>
+                <th>Fine</th>
+                <th style="width: 50%">Programma Settimanale (W10 - W24)</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="task-col">Coord. Generale & Reporting Mary/Altenia</td>
-                <td id="row-pm" class="resp-col">-</td>
-                <td><div class="bar-container"><div class="bar" style="width:100%; background:var(--primary)">W10 - W24</div></div></td>
+                <td class="task-name">INGEGNERIA GENERALE (Inquadramenti, TDD)</td>
+                <td>W10</td><td>W12</td>
+                <td><div class="gantt-bar bg-gen" style="width: 20%">Fase Setup</div></td>
             </tr>
             <tr>
-                <td class="task-col">Validazione Standard & Interfaccia Terna</td>
-                <td id="row-sup" class="resp-col">-</td>
-                <td><div class="bar-container"><div class="bar" style="width:100%; background:var(--accent)">SUPERVISIONE TECNICA</div></div></td>
+                <td class="task-name">INGEGNERIA CIVILE (Idraulica, Cut&Fill, Strutture)</td>
+                <td>W12</td><td>W20</td>
+                <td><div style="padding-left: 15%"><div class="gantt-bar bg-civ" style="width: 55%">Produzione & Asseverazioni</div></div></td>
             </tr>
             <tr>
-                <td class="task-col">Esecutivo & Idraulica (Catania)</td>
-                <td id="row-u1" class="resp-col">-</td>
-                <td><div class="bar-container"><div class="bar" style="width:85%; background:#e67e22">UNIT 1 - PARALLEL TRACK</div></div></td>
+                <td class="task-name">INGEGNERIA ELETTRICA (MT, Cavidotti, PPC)</td>
+                <td>W13</td><td>W21</td>
+                <td><div style="padding-left: 20%"><div class="gantt-bar bg-ele" style="width: 55%">Dimensionamento & Schemi</div></td>
             </tr>
             <tr>
-                <td class="task-col">Esecutivo & Infrastrutture (Palermo)</td>
-                <td id="row-u2" class="resp-col">-</td>
-                <td><div class="bar-container"><div class="bar" style="width:85%; background:#3498db">UNIT 2 - PARALLEL TRACK</div></div></td>
+                <td class="task-name">SECONDARY PERMITTING (Genio Civile, VVF)</td>
+                <td>W18</td><td>W23</td>
+                <td><div style="padding-left: 55%"><div class="gantt-bar" style="background:#8e44ad; width: 35%">Sottomissione Enti</div></div></td>
             </tr>
             <tr>
-                <td class="task-col">Esecutivo Agro-FV & Paesaggio (Trapani)</td>
-                <td id="row-u3" class="resp-col">-</td>
-                <td><div class="bar-container"><div class="bar" style="width:75%; background:#9b59b6">UNIT 3 - FOCUS AGRO</div></div></td>
-            </tr>
-            <tr>
-                <td class="task-col">Esecutivo Strutture & Permitting (Udine)</td>
-                <td id="row-u4" class="resp-col">-</td>
-                <td><div class="bar-container"><div class="bar" style="width:75%; background:#1abc9c">UNIT 4 - FOCUS ESE</div></div></td>
+                <td class="task-name">GESTIONE REVISIONI (Cicli 1-4) & CHIUSURA</td>
+                <td>W20</td><td>W24</td>
+                <td><div style="padding-left: 70%"><div class="gantt-bar" style="background:#2c3e50; width: 30%">Finalizzazione</div></div></td>
             </tr>
         </tbody>
     </table>
 </div>
 
-<div class="btn-box">
-    <button class="btn" onclick="generatePDF()">📥 Genera Offerta Tecnica (PDF A3)</button>
-</div>
+<button class="btn-export" onclick="exportPDF()">📥 SCARICA PDF PER ALTENIA</button>
 
 <script>
-    function update() {
-        const ids = ['pm', 'sup', 'u1', 'u2', 'u3', 'u4'];
-        ids.forEach(id => {
-            const val = document.getElementById('in-' + id).value || '-';
-            document.getElementById('out-' + id).innerText = val;
-            document.getElementById('row-' + id).innerText = val;
-            localStorage.setItem('nadara-png-' + id, val);
+    function upd() {
+        const fields = ['pm', 'sup', 'civ', 'ele', 'ssu', 'agro'];
+        fields.forEach(f => {
+            const val = document.getElementById('in-' + f).value || 'Da Nominare';
+            document.getElementById('out-' + f).innerText = val;
+            localStorage.setItem('nadara-final-' + f, val);
         });
     }
 
     window.onload = () => {
-        const ids = ['pm', 'sup', 'u1', 'u2', 'u3', 'u4'];
-        ids.forEach(id => {
-            const saved = localStorage.getItem('nadara-png-' + id);
-            if (saved && saved !== '-') {
-                document.getElementById('in-' + id).value = saved;
-            }
+        const fields = ['pm', 'sup', 'civ', 'ele', 'ssu', 'agro'];
+        fields.forEach(f => {
+            const saved = localStorage.getItem('nadara-final-' + f);
+            if(saved) document.getElementById('in-' + f).value = saved;
         });
-        update();
+        upd();
     }
 
-    function generatePDF() {
+    function exportPDF() {
         const element = document.getElementById('pdf-content');
-        const opt = {
-            margin: 10,
-            filename: 'Organigramma_TaskForce_Nadara.pdf',
+        html2pdf().set({
+            margin: 5,
+            filename: 'Offerta_Tecnica_Nadara_Rev03.pdf',
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
+            html2canvas: { scale: 2 },
             jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape' }
-        };
-        html2pdf().set(opt).from(element).save();
+        }).from(element).save();
     }
 </script>
-
 </body>
 </html>
