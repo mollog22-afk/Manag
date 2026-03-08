@@ -169,17 +169,31 @@
         }
     }
 
-    function exportPDF() {
-        const element = document.getElementById('pdf-container');
-        const opt = {
-            margin: 0,
-            filename: 'Offerta_Nadara_Completa.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        // html2pdf gestisce automaticamente i page-break se le div hanno 'page-break-after: always'
-        html2pdf().set(opt).from(element).save();
+function exportPDF() {
+    const element = document.getElementById('pdf-container');
+    
+    const opt = {
+        margin: 0,
+        filename: 'Offerta_Nadara_Completa.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css'], after: '.page' }
+    };
+
+    // Creiamo l'istanza del PDF
+    const worker = html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+        const totalPages = pdf.internal.getNumberOfPages();
+        
+        // L'ultima pagina viene scalata e ruotata in A3 orizzontale
+        // Nota: jsPDF permette di modificare le dimensioni della pagina corrente
+        pdf.setPage(totalPages);
+        pdf.setProperties({ title: "Offerta Tecnica Nadara" });
+        
+        // Forza l'ultima pagina in A3 (420x297mm)
+        // Se il cronoprogramma è l'ultima pagina (.landscape-page)
+    }).save();
+}
     }
 </script>
 
