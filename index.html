@@ -6,74 +6,84 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #1a3a5a; --accent: #2980b9; }
-        body { font-family: 'Segoe UI', sans-serif; background: #525659; margin: 0; padding: 0; }
         
-        /* Pannello Input */
-        .no-print { background: #fff; padding: 20px; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100; text-align: center; }
-        input { padding: 8px; margin: 5px; border: 1px solid #ccc; border-radius: 4px; width: 200px; }
+        /* Reset totale per evitare margini fantasma */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #525659; }
 
-        /* Struttura Pagine A4 */
+        .no-print { 
+            background: #fff; padding: 20px; border-bottom: 2px solid var(--accent); 
+            position: sticky; top: 0; z-index: 100; text-align: center;
+        }
+        input { padding: 8px; margin: 5px; border: 1px solid #ccc; border-radius: 4px; }
+
+        /* Contenitore PDF */
+        #pdf-content { width: 210mm; margin: 0 auto; background: white; }
+
+        /* Impostazione Pagina A4 precisa */
         .page { 
-            background: white; 
             width: 210mm; 
-            height: 296.5mm; 
+            height: 297mm; 
             padding: 20mm; 
-            margin: 10px auto; 
-            box-sizing: border-box; 
+            background: white;
             position: relative;
             overflow: hidden;
+            display: block;
+            page-break-after: always; /* Fondamentale per eliminare pagine bianche */
         }
 
-        /* Grafica */
+        /* Header e Testi */
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px; }
-        .logo-placeholder { font-weight: bold; font-size: 24px; color: var(--primary); }
+        .logo-text { font-weight: bold; font-size: 22px; color: var(--primary); }
+        .header-info { text-align: right; font-size: 11px; color: #666; }
         
-        .letter-content { line-height: 1.6; font-size: 14px; text-align: justify; }
+        .letter-content { line-height: 1.5; font-size: 14px; text-align: justify; }
         .subject { font-weight: bold; text-decoration: underline; margin: 20px 0; }
 
+        /* Organigramma */
         .org-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
-        .org-card { border: 1px solid #ccc; padding: 15px; text-align: center; border-radius: 5px; }
+        .org-card { border: 1px solid #ccc; padding: 12px; text-align: center; border-radius: 4px; }
         .full { grid-column: span 2; background: var(--primary); color: white; }
-        .name-tag { display: block; font-weight: bold; font-size: 18px; color: var(--accent); margin-top: 5px; }
+        .name-tag { display: block; font-weight: bold; font-size: 16px; color: var(--accent); margin-top: 5px; }
         .full .name-tag { color: #f1c40f; }
 
-        /* CRONOPROGRAMMA RUOTATO PER MASSIMA LEGGIBILITÀ IN A4 */
-        .rotated-container {
-            transform: rotate(90deg);
-            transform-origin: bottom left;
-            width: 250mm; /* Lunghezza dell'A4 */
+        /* CRONOPROGRAMMA RUOTATO 90° PER FARLO STARE IN A4 */
+        .landscape-wrapper {
             position: absolute;
-            top: -200mm; 
-            left: 40mm;
+            top: 50%;
+            left: 50%;
+            width: 250mm; /* Lunghezza del Gantt */
+            transform: translate(-50%, -50%) rotate(90deg);
         }
 
-        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; }
         th, td { border: 1px solid #aaa; padding: 6px; text-align: center; }
-        .task-name { text-align: left; width: 200px; font-weight: bold; }
-        .bar { height: 16px; background: var(--accent); border-radius: 8px; color: white; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .task-name { text-align: left; width: 180px; font-weight: bold; }
+        .bar { height: 14px; background: var(--accent); border-radius: 7px; color: white; font-size: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
 
-        .btn-dl { background: #27ae60; color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .btn-dl { background: #27ae60; color: white; border: none; padding: 12px 25px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="no-print">
-    <input type="text" id="in-pm" placeholder="Nome Project Manager" oninput="upd()">
-    <input type="text" id="in-sup" placeholder="Nome Supervisore" oninput="upd()">
-    <button class="btn-dl" onclick="exportPDF()">📥 SCARICA PDF (A4 LEGGIBILE)</button>
+    <input type="text" id="in-pm" placeholder="Project Manager" oninput="upd()">
+    <input type="text" id="in-sup" placeholder="Supervisore" oninput="upd()">
+    <button class="btn-dl" onclick="exportPDF()">📥 SCARICA PDF PERFETTO</button>
 </div>
 
 <div id="pdf-content">
     <div class="page">
         <div class="header">
-            <div class="logo-placeholder">No.Do. e Servizi Srl</div>
-            <div style="font-size:12px">Data: 08/03/2026</div>
+            <div class="logo-text">No.Do. e Servizi Srl</div>
+            <div class="header-info">Data: 08/03/2026</div>
         </div>
         <div class="letter-content">
             <p>Spett.le <strong>Altenia S.r.l.</strong><br>Alla c.a. di Annabarbara Baldacchino</p>
             <div class="subject">Oggetto: Proposta Tecnica per Ingegneria Esecutiva – Cluster Nadara (85 MWp)</div>
             <p>Gentile Annabarbara Baldacchino, con riferimento alla procedura di gara per l'affidamento dei servizi di ingegneria esecutiva relativi ai siti del Cluster Nadara, siamo lieti di sottoporre la nostra migliore offerta.</p>
-            <p>La task-force identificata garantisce la gestione simultanea dei 4 siti in 14 settimane.</p>
+            <p>La task-force identificata garantisce la gestione simultanea dei 4 siti in 14 settimane, con focus su secondary permitting e ottimizzazione Cut&Fill.</p>
+            <br>
             <p>Cordiali saluti,</p><br>
             <p><strong><span id="out-pm-sig">-</span></strong><br>Per No.Do. e Servizi Srl - L'Amministratore Ing. Francesco Guido</p>
         </div>
@@ -81,21 +91,23 @@
 
     <div class="page">
         <div class="header">
-            <div class="logo-placeholder">No.Do. e Servizi Srl</div>
-            <div style="font-size:12px">Allegato A: Organigramma</div>
+            <div class="logo-text">No.Do. e Servizi Srl</div>
+            <div class="header-info">Allegato A: Organigramma</div>
         </div>
-        <h2 style="text-align:center; color:var(--primary)">Organigramma di Commessa</h2>
+        <h2 style="text-align:center; color:var(--primary); margin-bottom: 20px;">Organigramma di Commessa</h2>
         <div class="org-grid">
             <div class="org-card full"><small>PROJECT MANAGER</small><span id="out-pm" class="name-tag">-</span></div>
             <div class="org-card full" style="background:#f9f9f9"><small>SUPERVISORE TECNICO</small><span id="out-sup" class="name-tag">-</span></div>
             <div class="org-card"><small>TEAM CIVILE</small><span class="name-tag">Ingegneri Senior</span></div>
             <div class="org-card"><small>TEAM ELETTRICO</small><span class="name-tag">Specialisti SCADA</span></div>
+            <div class="org-card"><small>AGRONOMO</small><span class="name-tag">Specialista Ambientale</span></div>
+            <div class="org-card"><small>DISEGNATORI</small><span class="name-tag">3-4 Unità CAD</span></div>
         </div>
     </div>
 
     <div class="page">
-        <div class="rotated-container">
-            <h2 style="color:var(--primary); margin-bottom:10px">Allegato B: Cronoprogramma (W10 - W24)</h2>
+        <div class="landscape-wrapper">
+            <h3 style="color:var(--primary); margin-bottom:10px">Allegato B: Cronoprogramma (W10 - W24)</h3>
             <table>
                 <thead>
                     <tr>
@@ -104,10 +116,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td class="task-name">Ingegneria Generale</td><td colspan="3"><div class="bar">SETUP</div></td><td colspan="12"></td></tr>
+                    <tr><td class="task-name">Inquadramento & Setup</td><td colspan="3"><div class="bar">SETUP</div></td><td colspan="12"></td></tr>
                     <tr><td class="task-name">Progettazione Civile</td><td colspan="2"></td><td colspan="8"><div class="bar" style="background:#d35400">DESIGN</div></td><td colspan="5"></td></tr>
                     <tr><td class="task-name">Progettazione Elettrica</td><td colspan="3"></td><td colspan="9"><div class="bar" style="background:#2980b9">DESIGN</div></td><td colspan="3"></td></tr>
-                    <tr><td class="task-name">Permitting & Enti</td><td colspan="9"></td><td colspan="4"><div class="bar" style="background:#8e44ad">ASSERVERAZIONI</div></td><td colspan="2"></td></tr>
+                    <tr><td class="task-name">Secondary Permitting</td><td colspan="9"></td><td colspan="4"><div class="bar" style="background:#8e44ad">ENTI</div></td><td colspan="2"></td></tr>
                 </tbody>
             </table>
         </div>
@@ -127,10 +139,11 @@
         const element = document.getElementById('pdf-content');
         const opt = {
             margin: 0,
-            filename: 'Offerta_Nadara.pdf',
+            filename: 'Offerta_Nadara_NoDo.pdf',
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: 'css' }
         };
         html2pdf().set(opt).from(element).save();
     }
