@@ -3,214 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <title>Offerta Tecnica - No.Do. e Servizi Srl</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        /* RESET RADICALE */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Helvetica', 'Arial', sans-serif; background: #f0f0f0; color: #333; }
+        /* CONFIGURAZIONE PER LO SCHERMO */
+        body { background: #525659; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
+        .no-print-panel { background: white; padding: 20px; text-align: center; border-bottom: 4px solid #1a3a5a; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        input { padding: 10px; margin: 5px; border: 1px solid #ccc; border-radius: 4px; width: 200px; }
+        .btn { background: #27ae60; color: white; border: none; padding: 12px 30px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; }
 
-        /* Pannello di controllo visibile solo a video */
-        .no-print-header { 
-            background: #1a3a5a; color: white; padding: 20px; text-align: center; 
-            position: sticky; top: 0; z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        /* REGOLE DI STAMPA - QUI SI DECIDE TUTTO */
+        @media print {
+            body { background: white; margin: 0; }
+            .no-print-panel { display: none !important; }
+            .page { margin: 0 !important; box-shadow: none !important; page-break-after: always; }
+            @page { size: A4 portrait; margin: 0; }
         }
-        .no-print-header input { padding: 10px; margin: 5px; border-radius: 4px; border: none; width: 250px; }
-        .btn-download { 
-            background: #27ae60; color: white; border: none; padding: 15px 30px; 
-            font-size: 18px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px;
-        }
 
-        /* AREA DOCUMENTO (FORZA A4) */
-        #content-to-pdf { width: 210mm; margin: 0 auto; background: white; }
-
+        /* STRUTTURA PAGINA A4 */
         .page { 
-            width: 210mm; 
-            height: 297mm; 
-            padding: 25mm 20mm; 
             background: white; 
+            width: 210mm; 
+            height: 296.8mm; /* Altezza precisa per evitare pagine bianche */
+            margin: 20px auto; 
+            padding: 20mm; 
+            box-sizing: border-box; 
             position: relative;
-            page-break-after: always; /* Forza il PDF a staccare qui */
+            overflow: hidden;
         }
 
-        /* HEADER DOCUMENTO */
-        .doc-header { border-bottom: 2px solid #1a3a5a; padding-bottom: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .company-name { font-size: 20px; font-weight: bold; color: #1a3a5a; text-transform: uppercase; }
-        .date-info { font-size: 12px; color: #666; }
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1a3a5a; padding-bottom: 15px; margin-bottom: 30px; }
+        .logo-text { font-size: 24px; font-weight: bold; color: #1a3a5a; }
+        .date { font-size: 12px; color: #666; }
 
-        /* TESTI */
-        .letter-text { font-size: 14px; line-height: 1.6; text-align: justify; }
-        .subject { font-weight: bold; text-decoration: underline; margin: 25px 0; font-size: 15px; }
+        /* CONTENUTI */
+        .content { font-size: 15px; line-height: 1.6; text-align: justify; color: #333; }
+        .subject { font-weight: bold; text-decoration: underline; margin: 30px 0; }
 
-        /* ORGANIGRAMMA SEMPLIFICATO */
-        .org-table { width: 100%; border-collapse: separate; border-spacing: 10px; margin-top: 20px; }
-        .org-box { border: 1.5px solid #1a3a5a; padding: 15px; text-align: center; border-radius: 6px; }
-        .org-box-main { background: #1a3a5a; color: white; }
-        .org-label { font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; }
-        .org-name { font-size: 16px; font-weight: bold; color: #2980b9; }
-        .org-box-main .org-name { color: #f1c40f; }
+        /* ORGANIGRAMMA */
+        .org-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .org-item { border: 1px solid #1a3a5a; padding: 15px; text-align: center; border-radius: 8px; }
+        .full { grid-column: span 2; background: #1a3a5a; color: white; }
+        .name { display: block; font-weight: bold; font-size: 18px; color: #2980b9; margin-top: 5px; }
+        .full .name { color: #f1c40f; }
 
-        /* GANTT ADATTIVO A4 VERTICALE */
-        .gantt-container { margin-top: 20px; }
-        .gantt-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .gantt-table th, .gantt-table td { 
-            border: 1px solid #ccc; font-size: 9px; text-align: center; 
-            height: 35px; overflow: hidden;
-        }
-        .th-task { width: 35%; text-align: left !important; padding-left: 5px; background: #f9f9f9; font-size: 10px; }
-        .bar-wrap { position: relative; width: 100%; height: 100%; display: flex; align-items: center; padding: 0 2px; }
-        .bar-fill { 
-            height: 18px; width: 100%; background: #2980b9; border-radius: 10px; 
-            color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 8px;
-        }
-
-        h2 { color: #1a3a5a; margin-bottom: 20px; font-size: 18px; text-align: center; }
+        /* GANTT (OTTIMIZZATO PER A4 VERTICALE) */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
+        th, td { border: 1px solid #ccc; padding: 8px 2px; text-align: center; font-size: 10px; }
+        .task-cell { text-align: left; width: 35%; padding-left: 10px; font-weight: bold; font-size: 11px; }
+        .bar-container { position: relative; height: 18px; background: #eee; border-radius: 9px; overflow: hidden; }
+        .bar { position: absolute; height: 100%; background: #2980b9; color: white; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="no-print-header">
-    <h2>Compila i Nomi e Scarica</h2>
-    <input type="text" id="in-pm" placeholder="Nome Project Manager" oninput="updateFields()">
-    <input type="text" id="in-sup" placeholder="Nome Supervisore" oninput="updateFields()">
-    <br>
-    <button class="btn-download" onclick="generatePDF()">📥 GENERA PDF (FORMATO A4 SICURO)</button>
+<div class="no-print-panel">
+    <input type="text" id="in-pm" placeholder="Nome Project Manager" oninput="sync()">
+    <input type="text" id="in-sup" placeholder="Nome Supervisore" oninput="sync()">
+    <button class="btn" onclick="window.print()">🖨️ STAMPA / SALVA PDF</button>
 </div>
 
-<div id="content-to-pdf">
-    <div class="page">
-        <div class="doc-header">
-            <div class="company-name">No.Do. e Servizi Srl</div>
-            <div class="date-info">Data: 08/03/2026</div>
-        </div>
-        <div class="letter-text">
-            <p>Spett.le <strong>Altenia S.r.l.</strong><br>Alla c.a. di Annabarbara Baldacchino</p>
-            <div class="subject">Oggetto: Proposta Tecnica per Ingegneria Esecutiva – Cluster Nadara (85 MWp)</div>
-            <p>Gentile Annabarbara Baldacchino,</p>
-            <p>con riferimento alla procedura di gara per l'affidamento dei servizi di ingegneria esecutiva relativi ai siti del Cluster Nadara, siamo lieti di sottoporre la nostra migliore offerta.</p>
-            <p>La nostra proposta garantisce la copertura di tutte le specialità richieste in 14 settimane, con una task-force dedicata per gestire simultaneamente i 4 siti del Cluster.</p>
-            <p>In allegato l'Organigramma e il Cronoprogramma allineato alla Document List Rev.03.</p>
-            <br><br>
-            <p>Cordiali saluti,</p>
-            <p style="margin-top:20px">
-                <strong id="out-pm-sig">IL PROJECT MANAGER</strong><br>
-                Per No.Do. e Servizi Srl - L'Amministratore Ing. Francesco Guido
-            </p>
-        </div>
+<div class="page">
+    <div class="header">
+        <div class="logo-text">No.Do. e Servizi Srl</div>
+        <div class="date">Data: 08/03/2026</div>
     </div>
-
-    <div class="page">
-        <div class="doc-header">
-            <div class="company-name">No.Do. e Servizi Srl</div>
-            <div class="date-info">Allegato A: Organigramma</div>
-        </div>
-        <h2>Task Force di Commessa</h2>
-        <table class="org-table">
-            <tr>
-                <td colspan="2">
-                    <div class="org-box org-box-main">
-                        <span class="org-label">PROJECT MANAGER (RESPONSABILE UNICO)</span>
-                        <span id="out-pm" class="org-name">-</span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="org-box" style="background:#f9f9f9">
-                        <span class="org-label">SUPERVISORE TECNICO SENIOR</span>
-                        <span id="out-sup" class="org-name">-</span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="org-box"><span class="org-label">RESP. CIVILE</span><span class="org-name">Team Senior</span></div></td>
-                <td><div class="org-box"><span class="org-label">RESP. ELETTRICO</span><span class="org-name">Team Senior</span></div></td>
-            </tr>
-            <tr>
-                <td><div class="org-box"><span class="org-label">AGRONOMO</span><span class="org-name">Specialista</span></div></td>
-                <td><div class="org-box"><span class="org-label">DISEGNATORI CAD</span><span class="org-name">3-4 Risorse</span></div></td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="page">
-        <div class="doc-header">
-            <div class="company-name">No.Do. e Servizi Srl</div>
-            <div class="date-info">Allegato B: Cronoprogramma</div>
-        </div>
-        <h2>Cronoprogramma Esecutivo (W10-W24)</h2>
-        <div class="gantt-container">
-            <table class="gantt-table">
-                <thead>
-                    <tr style="background:#eee">
-                        <th class="th-task">Fase / Settimana</th>
-                        <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="th-task">Setup & Ingegneria Gen.</td>
-                        <td colspan="3"><div class="bar-wrap"><div class="bar-fill" style="background:#7f8c8d">SETUP</div></div></td>
-                        <td colspan="12"></td>
-                    </tr>
-                    <tr>
-                        <td class="th-task">Ingegneria Civile</td>
-                        <td colspan="2"></td>
-                        <td colspan="8"><div class="bar-wrap"><div class="bar-fill" style="background:#d35400">DESIGN</div></div></td>
-                        <td colspan="5"></td>
-                    </tr>
-                    <tr>
-                        <td class="th-task">Ingegneria Elettrica</td>
-                        <td colspan="3"></td>
-                        <td colspan="9"><div class="bar-wrap"><div class="bar-fill" style="background:#2980b9">ELECTRICAL</div></div></td>
-                        <td colspan="3"></td>
-                    </tr>
-                    <tr>
-                        <td class="th-task">Permitting & Enti</td>
-                        <td colspan="9"></td>
-                        <td colspan="4"><div class="bar-wrap"><div class="bar-fill" style="background:#8e44ad">ENTI</div></div></td>
-                        <td colspan="2"></td>
-                    </tr>
-                    <tr>
-                        <td class="th-task">Revisioni Finali</td>
-                        <td colspan="11"></td>
-                        <td colspan="4"><div class="bar-wrap"><div class="bar-fill" style="background:#2c3e50">FINALE</div></div></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p style="font-size:10px; color:#666; margin-top:30px; border-top:1px solid #eee; padding-top:10px">
-            * Cronoprogramma ottimizzato per stampa A4. Ogni colonna rappresenta una settimana solare (W).
-        </p>
+    <div class="content">
+        <p>Spett.le <strong>Altenia S.r.l.</strong><br>Alla c.a. di Annabarbara Baldacchino</p>
+        <div class="subject">Oggetto: Proposta Tecnica per Ingegneria Esecutiva – Cluster Nadara (85 MWp)</div>
+        <p>Gentile Annabarbara Baldacchino,</p>
+        <p>con riferimento alla procedura di gara per l'affidamento dei servizi di ingegneria esecutiva relativi ai siti del Cluster Nadara, siamo lieti di sottoporre la nostra migliore offerta.</p>
+        <p>La nostra proposta garantisce la copertura di tutte le specialità richieste in 14 settimane, con una task-force dedicata capace di gestire simultaneamente i 4 siti del Cluster.</p>
+        <p>In allegato l'Organigramma nominativo e il Cronoprogramma dettagliato allineato alla Document List Rev.03.</p>
+        <br><br>
+        <p>Cordiali saluti,</p>
+        <p><strong id="out-pm-sig">IL PROJECT MANAGER</strong><br>Per No.Do. e Servizi Srl - L'Amministratore Ing. Francesco Guido</p>
     </div>
 </div>
 
-<script>
-    function updateFields() {
-        const pm = document.getElementById('in-pm').value || '-';
-        const sup = document.getElementById('in-sup').value || '-';
-        document.getElementById('out-pm').innerText = pm;
-        document.getElementById('out-pm-sig').innerText = pm.toUpperCase();
-        document.getElementById('out-sup').innerText = sup;
-    }
-
-    function generatePDF() {
-        const element = document.getElementById('content-to-pdf');
-        const opt = {
-            margin: 0,
-            filename: 'Offerta_Nadara_Standard_A4.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: 'css', after: '.page' }
-        };
-
-        // Nascondiamo temporaneamente lo scroll per una cattura pulita
-        document.body.style.overflow = 'hidden';
-        
-        html2pdf().set(opt).from(element).save().then(() => {
-            document.body.style.overflow = 'auto';
-        });
-    }
-</script>
-</body>
-</html>
+<div class="page">
+    <div class="header">
+        <div class="logo-text">No.Do. e Servizi Srl</div>
+        <div class="date">Allegato A: Organigramma</div>
+    </div>
+    <h2 style="text-align:center; color:#1a3a5a; margin-top:0">Task Force di Progetto</h2>
+    <div class="org-container">
+        <div class="org-item full">
+            <small>PROJECT MANAGER (UNICO RESPONSABILE)</small>
+            <span id="out-pm" class="name">-</span>
+        </div>
+        <div class="org-item full" style="background:#f9f9f9">
+            <small>SUPERVISORE TECNICO SENIOR</small>
+            <span id="out-sup" class="name">-</span>
+        </div>
+        <div class="org-item"><small>RESP. CIVILE</small><span class="name">Ingegneria Senior</span></div>
+        <div class="org-item"><small>RESP. ELETTRICO</small><span class="name">Ingegneria Senior</span></div>
+        <div class="org-item">
