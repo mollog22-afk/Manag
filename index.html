@@ -4,191 +4,191 @@
     <meta charset="UTF-8">
     <style>
         :root {
-            --primary: #1a3a5a;
-            --accent: #2980b9;
-            --setup: #7f8c8d;
-            --civil: #d35400;
-            --ele: #2980b9;
-            --permits: #8e44ad;
-            --rev: #2c3e50;
+            --primary: #0a2540;
+            --accent: #0070f3;
+            --bg-light: #f6f9fc;
+            --bar-mgmt: #6b7c93;
+            --bar-civil: #e34c26; /* Arancio ingegneria */
+            --bar-ele: #2d3ae3;   /* Blu elettrico */
+            --bar-val: #27ae60;   /* Verde risparmio/ottimizzazione */
+            --bar-permits: #8e44ad;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background: #525659; margin: 0; padding: 20px; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
 
-        /* Pagina A4 Orizzontale */
         .page-landscape {
             background: white;
             width: 297mm;
-            height: 209mm;
+            height: 210mm;
             margin: auto;
-            padding: 15mm;
+            padding: 12mm;
             box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             position: relative;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
         .header {
             display: flex;
             justify-content: space-between;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
+            align-items: flex-end;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
             margin-bottom: 20px;
         }
 
-        .logo-area { font-weight: bold; font-size: 20px; color: var(--primary); }
-        .title-area { text-align: right; }
-        .title-area h1 { margin: 0; font-size: 18px; color: var(--primary); }
-        .title-area p { margin: 0; font-size: 12px; color: #666; }
+        .logo-area h2 { margin: 0; color: var(--primary); letter-spacing: -1px; }
+        .info-area { text-align: right; font-size: 11px; line-height: 1.4; color: #444; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-        }
-
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        
         th {
-            background: #f8f9fa;
+            background: var(--bg-light);
             color: var(--primary);
-            font-weight: bold;
-            border: 1px solid #dee2e6;
-            padding: 8px;
-            text-align: center;
+            font-size: 10px;
+            text-transform: uppercase;
+            border: 1px solid #e6ebf1;
+            padding: 10px 2px;
         }
 
-        td {
-            border: 1px solid #dee2e6;
-            padding: 6px;
-            height: 30px;
-        }
+        td { border: 1px solid #e6ebf1; height: 32px; font-size: 11px; padding: 0 5px; }
 
-        .task-col { width: 280px; font-weight: bold; background: #fdfdfd; }
-        .week-col { width: 45px; text-align: center; }
+        .task-name { width: 320px; font-weight: 600; color: var(--primary); background: #fcfcfc; }
+        .week-col { width: 42px; text-align: center; }
 
-        /* Barre del Gantt */
-        .bar {
-            height: 18px;
-            border-radius: 4px;
+        /* Barre Gantt Ottimizzate */
+        .gantt-bar {
+            height: 20px;
+            border-radius: 3px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding-left: 10px;
             color: white;
             font-size: 9px;
             font-weight: bold;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        .bar.setup { background: var(--setup); }
-        .bar.civil { background: var(--civil); }
-        .bar.ele { background: var(--ele); }
-        .bar.permits { background: var(--permits); }
-        .bar.rev { background: var(--rev); }
+        /* Colori */
+        .mgmt { background: var(--bar-mgmt); }
+        .civil { background: var(--bar-civil); }
+        .ele { background: var(--bar-ele); }
+        .val { background: var(--bar-val); }
+        .perm { background: var(--bar-permits); }
+        
+        /* Milestone */
+        .milestone {
+            position: absolute;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            background: gold;
+            transform: rotate(45deg);
+            border: 1px solid #333;
+        }
 
         .legend {
-            margin-top: 20px;
-            display: flex;
-            gap: 20px;
-            font-size: 10px;
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            border-top: 1px solid #eee;
+            padding-top: 15px;
         }
 
-        .legend-item { display: flex; align-items: center; gap: 5px; }
-        .dot { width: 10px; height: 10px; border-radius: 2px; }
+        .legend-item { display: flex; align-items: center; font-size: 10px; gap: 8px; }
+        .box { width: 12px; height: 12px; border-radius: 2px; }
 
         @media print {
             body { background: none; padding: 0; }
-            .page-landscape { margin: 0; box-shadow: none; }
+            .page-landscape { box-shadow: none; margin: 0; }
             .no-print { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="page-landscape">
-        <div class="header">
-            <div class="logo-area">No.Do. e Servizi Srl</div>
-            <div class="title-area">
-                <h1>Allegato B: Cronoprogramma Esecutivo Dettagliato</h1>
-                <p>Progetto: Cluster Nadara (85 MWp) - Rif. Document List Rev.03</p>
-            </div>
+<div class="page-landscape">
+    <div class="header">
+        <div class="logo-area">
+            <h2>No.Do. e Servizi Srl</h2>
+            <div style="font-size: 12px; color: var(--accent);">Engineering & Project Management</div>
         </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th rowspan="2">Attività di Progettazione (Lotti 1-4)</th>
-                    <th colspan="15">Settimane di Commessa (Timeline 14 Weeks)</th>
-                </tr>
-                <tr>
-                    <script>
-                        for(let i=10; i<=24; i++) document.write(`<th class="week-col">W${i}</th>`);
-                    </script>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="task-col">Setup, TDD & Inquadramento Generale</td>
-                    <td colspan="3"><div class="bar setup">KICK-OFF / SETUP</div></td>
-                    <td colspan="12"></td>
-                </tr>
-
-                <tr>
-                    <td class="task-col">Progettazione Civile (Layout & Modellazione)</td>
-                    <td colspan="2"></td>
-                    <td colspan="6"><div class="bar civil">DESIGN PHASE</div></td>
-                    <td colspan="7"></td>
-                </tr>
-                <tr>
-                    <td class="task-col">Calcoli Strutturali & Ottimizzazione Cut&Fill</td>
-                    <td colspan="4"></td>
-                    <td colspan="5"><div class="bar civil">CIVIL CALCS</div></td>
-                    <td colspan="6"></td>
-                </tr>
-
-                <tr>
-                    <td class="task-col">Ingegneria Elettrica (MT, Cablaggi, BOS)</td>
-                    <td colspan="3"></td>
-                    <td colspan="7"><div class="bar ele">ELECTRICAL DESIGN</div></td>
-                    <td colspan="5"></td>
-                </tr>
-                <tr>
-                    <td class="task-col">Sistemi di Controllo & SCADA</td>
-                    <td colspan="6"></td>
-                    <td colspan="5"><div class="bar ele">AUTOMATION</div></td>
-                    <td colspan="4"></td>
-                </tr>
-
-                <tr>
-                    <td class="task-col">Secondary Permitting (VVF, Genio Civile, Enti)</td>
-                    <td colspan="8"></td>
-                    <td colspan="5"><div class="bar permits">ASSERVERAZIONI</div></td>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr>
-                    <td class="task-col">Gestione Cicli di Revisione Altenia (1-4)</td>
-                    <td colspan="10"></td>
-                    <td colspan="4"><div class="bar rev">REVISIONI</div></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="task-col">Emissione Finale (Ready for Construction)</td>
-                    <td colspan="13"></td>
-                    <td colspan="2"><div class="bar rev" style="background:#27ae60">FINAL</div></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="legend">
-            <div class="legend-item"><div class="dot" style="background:var(--setup)"></div> Management</div>
-            <div class="legend-item"><div class="dot" style="background:var(--civil)"></div> Area Civile</div>
-            <div class="legend-item"><div class="dot" style="background:var(--ele)"></div> Area Elettrica</div>
-            <div class="legend-item"><div class="dot" style="background:var(--permits)"></div> Permitting</div>
-            <div class="legend-item"><div class="dot" style="background:var(--rev)"></div> Qualità & Consegna</div>
-        </div>
-
-        <div style="margin-top: 15px; font-size: 10px; color: #666; font-style: italic;">
-            * Nota: Le attività per i 4 siti del Cluster (Nadara 1, 2, 3, 4) procedono in parallelo con step di validazione cross-check settimanali.
+        <div class="info-area">
+            <strong>OFFERTA TECNICA: CLUSTER NADARA (85 MWp)</strong><br>
+            Allegato B: Programma di Emissione Documentale Esecutiva<br>
+            Rif. Document List Altenia Rev.03 (25_1587)
         </div>
     </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="task-name">Work Breakdown Structure (WBS)</th>
+                <script>for(let i=10; i<=24; i++) document.write(`<th class="week-col">W${i}</th>`);</script>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="task-name">Project Setup & Kick-off Meeting (Nadara 1-4)</td>
+                <td colspan="2"><div class="gantt-bar mgmt">START-UP</div></td>
+                <td colspan="13"></td>
+            </tr>
+            <tr>
+                <td class="task-name" style="color: var(--bar-val);">Value Engineering: Ottimizzazione BOS & Cut/Fill</td>
+                <td colspan="1"></td>
+                <td colspan="4"><div class="gantt-bar val">COST OPTIMIZATION</div></td>
+                <td colspan="10"></td>
+            </tr>
+            <tr>
+                <td class="task-name">Civil Design: Layout, Viabilità e Drenaggi</td>
+                <td colspan="2"></td>
+                <td colspan="7"><div class="gantt-bar civil">CIVIL DESIGN (REV.0)</div></td>
+                <td colspan="6"></td>
+            </tr>
+            <tr>
+                <td class="task-name">Ingegneria Strutturale & Fondazioni Tracker</td>
+                <td colspan="4"></td>
+                <td colspan="6"><div class="gantt-bar civil">STRUCTURAL CALCS</div></td>
+                <td colspan="5"></td>
+            </tr>
+            <tr>
+                <td class="task-name">Electrical Design: DC/MT & Sistemi SCADA</td>
+                <td colspan="3"></td>
+                <td colspan="8"><div class="gantt-bar ele">ELECTRICAL (REV.0)</div></td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td class="task-name">Secondary Permitting & Relazioni Enti (VVF/Genio)</td>
+                <td colspan="9"></td>
+                <td colspan="4"><div class="gantt-bar perm">ASSERVERAZIONI<div class="milestone"></div></div></td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td class="task-name">Gestione Feedback Altenia & Cross-Check Siti</td>
+                <td colspan="11"></td>
+                <td colspan="3"><div class="gantt-bar mgmt" style="background:#2c3e50">QA/QC REVIEW</div></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="task-name">Emissione Finale "READY FOR CONSTRUCTION"</td>
+                <td colspan="14"></td>
+                <td><div class="gantt-bar" style="background:var(--bar-val); justify-content:center; padding:0">RFC</div></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="legend">
+        <div class="legend-item"><div class="box mgmt"></div> Project Management</div>
+        <div class="legend-item"><div class="box civil"></div> Ingegneria Civile</div>
+        <div class="legend-item"><div class="box ele"></div> Ingegneria Elettrica</div>
+        <div class="legend-item"><div class="box val"></div> Value Engineering</div>
+        <div class="legend-item"><div class="box perm"></div> Permitting/Enti</div>
+    </div>
+
+    <div style="margin-top: 20px; padding: 10px; background: #fdf6ec; border-left: 4px solid #f39c12; font-size: 10px;">
+        <strong>Logica di Ottimizzazione:</strong> Le attività sono schedulate per garantire la consegna dei lotti civili entro la W19, permettendo l'avvio delle asseverazioni al Genio Civile in parallelo al completamento dei dettagli elettrici (W20-21). Il focus sulla "Cost Optimization" nelle prime settimane garantisce che il progetto esecutivo sia già ottimizzato per il CAPEX.
+    </div>
+</div>
 
 </body>
 </html>
