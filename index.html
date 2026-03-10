@@ -3,167 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        /* Forza le dimensioni A4 Orizzontale */
-        @page { size: A4 landscape; margin: 0; }
+        @page { size: A4 landscape; margin: 10mm; }
+        body { font-family: 'Segoe UI', Calibri, sans-serif; background: #fff; margin: 0; padding: 0; color: #333; }
+        .container { width: 275mm; margin: auto; border: 1px solid #000; padding: 5px; }
         
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            background: #f0f0f0; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            justify-content: center;
-        }
+        /* Testata tecnica in stile tabella professionale */
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .header-table td { border: 1px solid #000; padding: 8px; vertical-align: middle; }
+        .comp-name { font-size: 16px; font-weight: bold; color: #1a3a5a; }
+        .doc-title { text-align: center; font-size: 14px; font-weight: bold; text-transform: uppercase; }
+        
+        /* Tabella Gantt */
+        .gantt-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .gantt-table th, .gantt-table td { border: 1px solid #666; font-size: 9px; height: 22px; text-align: center; }
+        .task-col { width: 280px; text-align: left; padding-left: 5px; font-weight: bold; background: #f2f2f2; }
+        .site-col { width: 45px; font-size: 8px; background: #fafafa; }
+        .week-col { width: 35px; background: #eee; }
 
-        .document-container {
-            background: white;
-            width: 297mm; /* Larghezza esatta A4 */
-            height: 210mm; /* Altezza esatta A4 */
-            padding: 10mm;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; /* Impedisce la fuoriuscita dai bordi */
-        }
+        /* Barre Grafiche Professionali */
+        .bar { height: 14px; margin: 0 1px; border: 0.5px solid #000; display: flex; align-items: center; justify-content: center; color: white; font-size: 7.5px; font-weight: bold; }
+        .b-mgmt { background: #555; }
+        .b-civil { background: #8B0000; }
+        .b-ele { background: #003366; }
+        .b-val { background: #006400; }
+        .b-perm { background: #4B0082; }
 
-        /* Testata compatta */
-        .doc-header {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            border: 1.5px solid #333;
-            margin-bottom: 15px;
-        }
-
-        .h-cell {
-            padding: 8px;
-            border-right: 1.5px solid #333;
-            font-size: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed; /* Impedisce alla tabella di allargarsi oltre il 100% */
-        }
-
-        th, td {
-            border: 1px solid #999;
-            height: 25px;
-            font-size: 9px;
-            padding: 0 2px;
-            overflow: hidden;
-        }
-
-        .wbs-name { width: 25%; text-align: left; padding-left: 5px; font-weight: bold; background: #f9f9f9; }
-        .week-cell { width: 5%; text-align: center; }
-
-        /* Barre Gantt */
-        .bar {
-            height: 14px;
-            margin: 2px 0;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 8px;
-            font-weight: bold;
-        }
-
-        /* Colori Tecnici */
-        .b-civil { background: #b03a2e; }
-        .b-ele { background: #2874a6; }
-        .b-opt { background: #1e8449; }
-        .b-perm { background: #7d3c98; }
-        .b-mgmt { background: #515a6a; }
-
-        .footer {
-            margin-top: auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 10px;
-            font-size: 9px;
-        }
-
-        .signature { border: 1px solid #333; padding: 10px; text-align: center; }
-
-        @media print {
-            body { background: none; }
-            .document-container { box-shadow: none; margin: 0; }
-        }
+        .footer { margin-top: 10px; display: flex; justify-content: space-between; font-size: 9px; }
+        .notes { width: 70%; border: 1px solid #000; padding: 5px; }
+        .sign { width: 25%; border: 1px solid #000; padding: 5px; text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="document-container">
-    <div class="doc-header">
-        <div class="h-cell"><strong>No.Do. e Servizi Srl</strong></div>
-        <div class="h-cell" style="text-align:center">
-            <b style="font-size:12px">CRONOPROGRAMMA PRESTAZIONI</b><br>
-            Cluster Nadara (85 MWp) - Progettazione Esecutiva
-        </div>
-        <div class="h-cell" style="border:none">
-            Rev: 03<br>Data: 10/03/2026
-        </div>
-    </div>
+<div class="container">
+    <table class="header-table">
+        <tr>
+            <td width="25%"><span class="comp-name">No.Do. e Servizi Srl</span><br><small>Engineering Division</small></td>
+            <td width="50%" class="doc-title">Programma di Emissione Progetto Esecutivo<br>Cluster Nadara (85 MWp) - Siti 01, 02, 03, 04</td>
+            <td width="25%" style="font-size: 9px;">Cod: NDR-ING-GNT-03<br>Data: 10/03/2026<br>Revisione: 03</td>
+        </tr>
+    </table>
 
-    <table>
+    <table class="gantt-table">
         <thead>
             <tr>
-                <th class="wbs-name">Attività / Deliverable</th>
-                <script>for(let i=10; i<=24; i++) document.write(`<th class="week-cell">W${i}</th>`);</script>
+                <th class="task-col">Descrizione Attività / Deliverable</th>
+                <th class="site-col">Siti</th>
+                <script>for(let i=10; i<=24; i++) document.write(`<th class="week-col">W${i}</th>`);</script>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="wbs-name">Kick-off & Analisi TDD</td>
-                <td colspan="2"><div class="bar b-mgmt">START</div></td>
-                <td colspan="13"></td>
+                <td class="task-col">Analisi Documentale, TDD & Setup Commessa</td>
+                <td class="site-col">1-2-3-4</td>
+                <td colspan="2"><div class="bar b-mgmt">START</div></td><td colspan="13"></td>
             </tr>
             <tr>
-                <td class="wbs-name" style="color:#1e8449">Value Engineering & Cut/Fill</td>
-                <td></td>
-                <td colspan="4"><div class="bar b-opt">OTTIMIZZAZIONE</div></td>
-                <td colspan="10"></td>
+                <td class="task-col" style="color:#006400">Value Engineering: Ottimizzazione BOS & Movimento Terra</td>
+                <td class="site-col">ALL</td>
+                <td></td><td colspan="4"><div class="bar b-val">COST SAVING</div></td><td colspan="10"></td>
             </tr>
             <tr>
-                <td class="wbs-name">Progetto Civile (Idraulica/Viabilità)</td>
-                <td colspan="2"></td>
-                <td colspan="7"><div class="bar b-civil">CIVIL DESIGN</div></td>
-                <td colspan="6"></td>
+                <td class="task-col">Progettazione Civile, Idraulica e Viabilità (Rev.0)</td>
+                <td class="site-col">1-2-3-4</td>
+                <td colspan="2"></td><td colspan="7"><div class="bar b-civil">CIVIL DESIGN</div></td><td colspan="6"></td>
             </tr>
             <tr>
-                <td class="wbs-name">Progetto Elettrico & SCADA</td>
-                <td colspan="3"></td>
-                <td colspan="8"><div class="bar b-ele">ELECTRICAL</div></td>
-                <td colspan="4"></td>
+                <td class="task-col">Ingegneria Elettrica, Cablaggi e Sistemi SCADA</td>
+                <td class="site-col">1-2-3-4</td>
+                <td colspan="3"></td><td colspan="8"><div class="bar b-ele">ELECTRICAL</div></td><td colspan="4"></td>
             </tr>
             <tr>
-                <td class="wbs-name">Secondary Permitting (VVF/Genio)</td>
-                <td colspan="8"></td>
-                <td colspan="5"><div class="bar b-perm">ASSERVERAZIONI</div></td>
-                <td colspan="2"></td>
+                <td class="task-col">Fascicoli Secondari (VVF / Genio Civile) & Asseverazioni</td>
+                <td class="site-col">ALL</td>
+                <td colspan="9"></td><td colspan="4"><div class="bar b-perm">PERMITTING</div></td><td colspan="2"></td>
             </tr>
             <tr>
-                <td class="wbs-name">Revisioni & Emissione RFC</td>
-                <td colspan="11"></td>
-                <td colspan="3"><div class="bar b-mgmt">FINAL</div></td>
-                <td></td>
+                <td class="task-col">QA/QC Internal Review & Gestione Feedback Altenia</td>
+                <td class="site-col">ALL</td>
+                <td colspan="11"></td><td colspan="3"><div class="bar b-mgmt" style="background:#000">FINAL</div></td><td></td>
             </tr>
         </tbody>
     </table>
 
     <div class="footer">
-        <div style="border:1px solid #333; padding:10px">
-            <strong>Note Operative:</strong> Progettazione simultanea sui 4 siti (Lotti 1-4). 
-            Le ottimizzazioni BOS sono finalizzate alla riduzione dei volumi di scavo e lunghezze cavi.
+        <div class="notes">
+            <strong>NOTE DEL RESPONSABILE DI COMMESSA:</strong><br>
+            - La pianificazione prevede la gestione parallela dei 4 lotti con emissioni settimanali.<br>
+            - Focus primario: riduzione CAPEX attraverso l'ottimizzazione delle sezioni cavi e del bilanciamento terre (Cut&Fill).
         </div>
-        <div class="signature">
-            <b>Approvato da:</b><br><br>____________________
-        </div>
+        <div class="sign"><strong>Approvazione Tecnica:</strong><br><br>____________________</div>
     </div>
 </div>
 
