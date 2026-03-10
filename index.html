@@ -2,205 +2,236 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Cronoprogramma Esecutivo - No.Do. e Servizi Srl</title>
     <style>
-        @page { size: A4 landscape; margin: 8mm; }
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; margin: 0; padding: 0; background: #f4f4f4; }
+        /* CONFIGURAZIONE FISICA A3 */
+        @page { 
+            size: A3 landscape; 
+            margin: 10mm; 
+        }
         
-        .page-wrapper {
-            width: 280mm;
-            height: 195mm;
-            margin: 20px auto;
-            background: white;
-            padding: 10mm;
-            box-sizing: border-box;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: #f0f0f0; 
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
         }
 
-        /* Testata Istituzionale */
-        .doc-header {
+        .a3-container {
+            width: 400mm; /* Dimensioni A3 meno i margini */
+            height: 277mm;
+            margin: 10px auto;
+            background: white;
+            padding: 15mm;
+            box-sizing: border-box;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            border-bottom: 2px solid #0a2540;
-            padding-bottom: 12px;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        /* HEADER PROFESSIONALE */
+        .header {
+            display: grid;
+            grid-template-columns: 1.5fr 3fr 1.5fr;
+            border: 2px solid #0a2540;
             margin-bottom: 20px;
         }
 
-        .company-info b { font-size: 20px; color: #0a2540; letter-spacing: 0.5px; }
-        .company-info span { display: block; font-size: 11px; text-transform: uppercase; color: #666; font-weight: bold; }
-        
-        .project-info { text-align: right; }
-        .project-info h1 { margin: 0; font-size: 14px; color: #0a2540; text-transform: uppercase; }
-        .project-info p { margin: 3px 0 0 0; font-size: 10px; color: #444; }
-
-        /* Tabella Gantt Tecnica */
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 25px; }
-        
-        th { 
-            background: #f8f9fa; 
-            border: 1px solid #d1d5db; 
-            font-size: 10px; 
-            text-transform: uppercase; 
-            padding: 10px 2px;
-            color: #4b5563;
-        }
-
-        td { border: 1px solid #d1d5db; height: 30px; font-size: 11px; padding: 0 5px; text-align: center; }
-
-        .task-name { width: 320px; text-align: left; font-weight: 600; color: #111827; background: #fafafa; }
-        .site-label { width: 50px; font-size: 9px; color: #6b7280; font-weight: bold; }
-        .week-header { width: 42px; }
-
-        /* Barre del Cronoprogramma */
-        .bar {
-            height: 14px;
-            border-radius: 3px;
-            position: relative;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-
-        .b-dark { background: #374151; } /* Management */
-        .b-purple { background: #7c3aed; } /* Civile */
-        .b-blue { background: #2563eb; } /* Elettrico */
-        .b-green { background: #059669; } /* Value Engineering */
-        .b-gold { background: #d97706; } /* Permitting */
-
-        /* Milestone (Punta di freccia / Diamante) */
-        .milestone {
-            width: 10px;
-            height: 10px;
-            background: #000;
-            transform: rotate(45deg);
-            margin: auto;
-        }
-
-        /* Agenda Kick-off Meeting */
-        .kom-panel {
-            background: #f9fafb;
-            border: 1px solid #0a2540;
-            border-left: 5px solid #0a2540;
+        .h-cell {
             padding: 15px;
+            border-right: 2px solid #0a2540;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .h-cell:last-child { border-right: none; }
+        .h-cell b { color: #0a2540; font-size: 14px; text-transform: uppercase; }
+
+        /* TABELLA GANTT SU SCALA A3 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-bottom: 30px;
+        }
+
+        th {
+            background: #0a2540;
+            color: white;
+            font-size: 12px;
+            padding: 12px 5px;
+            border: 1px solid #fff;
+            text-transform: uppercase;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            height: 35px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .task-col { 
+            width: 350px; 
+            text-align: left; 
+            padding-left: 15px; 
+            font-weight: bold; 
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        .site-col { width: 60px; font-weight: bold; color: #666; }
+        .w-col { width: 45px; background: #fdfdfd; }
+
+        /* BARRE GRAFICHE */
+        .bar {
+            height: 20px;
+            margin: 0 2px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .b-mgmt { background: #34495e; }
+        .b-civil { background: #c0392b; }
+        .b-ele { background: #2980b9; }
+        .b-opt { background: #27ae60; }
+        .b-final { background: #000; }
+
+        /* SEZIONE KOM - PIU' SPAZIO SU A3 */
+        .kom-section {
+            border: 2px solid #0a2540;
+            background: #f8fafc;
+            padding: 20px;
             flex-grow: 1;
         }
 
         .kom-header {
-            font-size: 12px;
+            font-size: 16px;
             font-weight: bold;
             color: #0a2540;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0a2540;
+            display: inline-block;
         }
 
-        .kom-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-        .kom-item b { display: block; font-size: 11px; color: #111827; margin-bottom: 4px; }
-        .kom-item p { margin: 0; font-size: 10px; color: #4b5563; line-height: 1.4; }
+        .kom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+        }
+
+        .kom-card {
+            background: white;
+            padding: 15px;
+            border: 1px solid #cbd5e1;
+            border-top: 5px solid #0a2540;
+        }
+
+        .kom-card b { font-size: 13px; color: #0a2540; display: block; margin-bottom: 8px; }
+        .kom-card p { margin: 0; font-size: 12px; line-height: 1.5; color: #475569; }
 
         .footer {
-            margin-top: 15px;
+            margin-top: 20px;
             display: flex;
             justify-content: space-between;
-            font-size: 10px;
-            color: #9ca3af;
+            font-size: 11px;
+            color: #64748b;
         }
 
+        /* FIX STAMPA */
         @media print {
-            body { background: none; padding: 0; }
-            .page-wrapper { box-shadow: none; margin: 0; width: 100%; height: 100%; }
+            body { background: none; }
+            .a3-container { box-shadow: none; margin: 0; width: 100%; }
         }
     </style>
 </head>
 <body>
 
-<div class="page-wrapper">
-    <div class="doc-header">
-        <div class="company-info">
+<div class="a3-container">
+    <div class="header">
+        <div class="h-cell">
             <b>No.Do. e Servizi Srl</b>
-            <span>Divisione Progettazione e Ingegneria</span>
+            <span style="font-size: 11px;">Engineering & Project Management</span>
         </div>
-        <div class="project-info">
-            <h1>Cronoprogramma di Emissione Esecutiva (Rev. 03)</h1>
-            <p>Cluster Fotovoltaico Nadara (85 MWp) | Lotti: NDR-01, 02, 03, 04</p>
+        <div class="h-cell" style="text-align:center">
+            <b style="font-size:18px">Programma Emissione Documentazione Tecnica (Rev. 03)</b><br>
+            <span style="font-size: 14px;">Cluster Nadara (85 MWp) - Progettazione Esecutiva Lotti 01-04</span>
+        </div>
+        <div class="h-cell">
+            Ref: <b>NDR-ING-GNT-2026</b><br>
+            Data: <b>10/03/2026</b>
         </div>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th class="task-name">Attività / Deliverable Progetto Esecutivo</th>
-                <th class="site-label">Siti</th>
-                <script>for(let i=10; i<=24; i++) document.write(`<th class="week-header">W${i}</th>`);</script>
+                <th class="task-col">Attività di Ingegneria / Milestone</th>
+                <th class="site-col">Siti</th>
+                <script>for(let i=10; i<=24; i++) document.write(`<th class="w-col">W${i}</th>`);</script>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="task-name">Setup Commessa & Kick-off Meeting (KoM)</td>
-                <td class="site-label">ALL</td>
-                <td colspan="2"><div class="bar b-dark"></div></td>
-                <td colspan="13"></td>
+                <td class="task-col">Kick-off Meeting & Setup Commessa</td>
+                <td class="site-col">ALL</td>
+                <td colspan="2"><div class="bar b-mgmt">KOM SETUP</div></td><td colspan="13"></td>
             </tr>
             <tr>
-                <td class="task-name" style="color: #059669;">Value Engineering: Ottimizzazione BOS & Cut/Fill</td>
-                <td class="site-label">1-2-3-4</td>
-                <td></td>
-                <td colspan="4"><div class="bar b-green"></div></td>
-                <td colspan="10"></td>
+                <td class="task-col" style="color:#27ae60">Value Engineering: Ottimizzazione BOS & Cut/Fill</td>
+                <td class="site-col">1-2-3-4</td>
+                <td></td><td colspan="4"><div class="bar b-opt">COST SAVING</div></td><td colspan="10"></td>
             </tr>
             <tr>
-                <td class="task-name">Ingegneria Civile: Modellazione, Drenaggi e Viabilità</td>
-                <td class="site-label">1-2-3-4</td>
-                <td colspan="2"></td>
-                <td colspan="7"><div class="bar b-purple"></div></td>
-                <td colspan="6"></td>
+                <td class="task-col">Progettazione Civile: Idraulica, Viabilità e Strutture</td>
+                <td class="site-col">1-2-3-4</td>
+                <td colspan="2"></td><td colspan="8"><div class="bar b-civil">CIVIL DESIGN PHASE</div></td><td colspan="5"></td>
             </tr>
             <tr>
-                <td class="task-name">Ingegneria Elettrica: Dimensionamento MT e SCADA</td>
-                <td class="site-label">1-2-3-4</td>
-                <td colspan="3"></td>
-                <td colspan="8"><div class="bar b-blue"></div></td>
-                <td colspan="4"></td>
+                <td class="task-col">Ingegneria Elettrica: Cablaggi MT, Quadri e SCADA</td>
+                <td class="site-col">1-2-3-4</td>
+                <td colspan="3"></td><td colspan="9"><div class="bar b-ele">ELECTRICAL PKG</div></td><td colspan="3"></td>
             </tr>
             <tr>
-                <td class="task-name">Permitting Secondario & Asseverazioni Tecnici</td>
-                <td class="site-label">ALL</td>
-                <td colspan="9"></td>
-                <td colspan="4"><div class="bar b-gold"></div></td>
-                <td></td>
+                <td class="task-col">Secondary Permitting & Asseverazioni (VVF/Genio)</td>
+                <td class="site-col">ALL</td>
+                <td colspan="10"></td><td colspan="4"><div class="bar b-mgmt" style="background:#8e44ad">PERMITS</div></td><td></td>
             </tr>
             <tr>
-                <td class="task-name">QA/QC Internal Review & Ready for Construction (RFC)</td>
-                <td class="site-label">ALL</td>
-                <td colspan="13"></td>
-                <td><div class="milestone"></div></td>
+                <td class="task-col" style="background:#eee">Ready for Construction (RFC) - Final Emission</td>
+                <td class="site-col">ALL</td>
+                <td colspan="14"></td><td style="background:#000; color:white; font-weight:bold">RFC</td>
             </tr>
         </tbody>
     </table>
 
-    <div class="kom-panel">
-        <div class="kom-header">Dettaglio Operativo Kick-off Meeting (Settimana 10)</div>
+    <div class="kom-section">
+        <div class="kom-header">Dettaglio Strategico Kick-off Meeting (W10)</div>
         <div class="kom-grid">
-            <div class="kom-item">
-                <b>1. ANALISI DATI DI INPUT</b>
-                <p>Verifica dei rilievi topografici e delle indagini geotecniche per i 4 siti. Congelamento perimetri e vincoli.</p>
+            <div class="kom-card">
+                <b>01. Validazione Input</b>
+                <p>Verifica dei rilievi topografici e delle indagini geotecniche per i 4 siti. Congelamento dei perimetri e dei vincoli ambientali.</p>
             </div>
-            <div class="kom-item">
-                <b>2. COORDINAMENTO TECNICO</b>
-                <p>Definizione protocolli di interscambio e standard grafici secondo la Document List Altenia Rev. 03.</p>
+            <div class="kom-card">
+                <b>02. Protocolli di Commessa</b>
+                <p>Definizione degli standard grafici e dei flussi di approvazione documenti secondo la Document List Altenia Rev. 03.</p>
             </div>
-            <div class="kom-item">
-                <b>3. VALUE ENGINEERING</b>
-                <p>Discussione dei criteri di ottimizzazione BOS per la minimizzazione del CAPEX e dei volumi di scavo.</p>
+            <div class="kom-card">
+                <b>03. Obiettivi Value Engineering</b>
+                <p>Analisi preliminare per la riduzione del CAPEX attraverso l'ottimizzazione del bilanciamento terre e delle sezioni cavidotti.</p>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <div>Documento ad uso interno e per validazione committente. Le tempistiche sono vincolate alla ricezione input W11.</div>
-        <div style="color: #333; font-weight: bold;">Responsabile di Commessa: Ing. Francesco Guido</div>
+        <div>* Nota: La pianificazione assume la ricezione di tutti i dati di input entro la W11.</div>
+        <div style="font-weight: bold; color: #333;">Responsabile di Commessa: Ing. Francesco Guido</div>
     </div>
 </div>
 
