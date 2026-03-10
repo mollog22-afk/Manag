@@ -4,189 +4,224 @@
     <meta charset="UTF-8">
     <style>
         :root {
-            --primary: #0a2540;
-            --accent: #0070f3;
-            --bg-light: #f6f9fc;
-            --bar-mgmt: #6b7c93;
-            --bar-civil: #e34c26; /* Arancio ingegneria */
-            --bar-ele: #2d3ae3;   /* Blu elettrico */
-            --bar-val: #27ae60;   /* Verde risparmio/ottimizzazione */
-            --bar-permits: #8e44ad;
+            --tech-blue: #1b365d;
+            --tech-gray: #4a4a4a;
+            --border: #c0c0c0;
+            --bg-table: #ffffff;
         }
 
-        body { font-family: 'Inter', -apple-system, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        body { font-family: Arial, sans-serif; background: #525659; margin: 0; padding: 10px; }
 
-        .page-landscape {
+        .document-container {
             background: white;
             width: 297mm;
             height: 210mm;
             margin: auto;
             padding: 12mm;
             box-sizing: border-box;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             position: relative;
         }
 
-        .header {
+        /* Testata formale da ufficio tecnico */
+        .doc-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            border-bottom: 3px solid var(--primary);
-            padding-bottom: 15px;
+            border: 1px solid var(--border);
             margin-bottom: 20px;
         }
 
-        .logo-area h2 { margin: 0; color: var(--primary); letter-spacing: -1px; }
-        .info-area { text-align: right; font-size: 11px; line-height: 1.4; color: #444; }
-
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        
-        th {
-            background: var(--bg-light);
-            color: var(--primary);
-            font-size: 10px;
-            text-transform: uppercase;
-            border: 1px solid #e6ebf1;
-            padding: 10px 2px;
-        }
-
-        td { border: 1px solid #e6ebf1; height: 32px; font-size: 11px; padding: 0 5px; }
-
-        .task-name { width: 320px; font-weight: 600; color: var(--primary); background: #fcfcfc; }
-        .week-col { width: 42px; text-align: center; }
-
-        /* Barre Gantt Ottimizzate */
-        .gantt-bar {
-            height: 20px;
-            border-radius: 3px;
+        .header-cell {
+            padding: 10px;
+            border-right: 1px solid var(--border);
             display: flex;
-            align-items: center;
-            padding-left: 10px;
-            color: white;
-            font-size: 9px;
-            font-weight: bold;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header-cell:last-child { border-right: none; }
+
+        .title-block { flex-grow: 2; }
+        .title-block h1 { margin: 0; font-size: 16px; color: var(--tech-blue); text-transform: uppercase; }
+        .title-block p { margin: 3px 0 0 0; font-size: 11px; font-weight: bold; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 10px;
+        }
+
+        th {
+            background: #e9ecef;
+            border: 1px solid var(--border);
+            padding: 8px 2px;
+            color: #333;
+        }
+
+        td { border: 1px solid var(--border); height: 28px; padding: 0 4px; }
+
+        .wbs-cell { width: 350px; background: #f8f9fa; font-weight: bold; }
+        .site-cell { width: 70px; text-align: center; color: #666; font-size: 9px; }
+        .week-col { width: 40px; text-align: center; background: #fdfdfd; }
+
+        /* Barre Gantt Professionali */
+        .bar {
+            height: 16px;
+            border: 1px solid rgba(0,0,0,0.2);
             position: relative;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        /* Colori */
-        .mgmt { background: var(--bar-mgmt); }
-        .civil { background: var(--bar-civil); }
-        .ele { background: var(--bar-ele); }
-        .val { background: var(--bar-val); }
-        .perm { background: var(--bar-permits); }
-        
-        /* Milestone */
-        .milestone {
+        .bar-label {
             position: absolute;
-            right: -5px;
-            width: 10px;
-            height: 10px;
-            background: gold;
+            width: 100%;
+            text-align: center;
+            font-size: 8px;
+            line-height: 16px;
+            color: white;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* Palette Ingegneria */
+        .b-mgmt { background: #5a6268; }
+        .b-civil { background: #a52a2a; }
+        .b-ele { background: #004a99; }
+        .b-opt { background: #2e7d32; }
+        .b-perm { background: #6a1b9a; }
+
+        .milestone-diamond {
+            width: 8px;
+            height: 8px;
+            background: #000;
             transform: rotate(45deg);
-            border: 1px solid #333;
+            margin: auto;
         }
 
-        .legend {
-            margin-top: 25px;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            border-top: 1px solid #eee;
-            padding-top: 15px;
+        .footer-notes {
+            margin-top: 20px;
+            display: flex;
+            gap: 30px;
         }
 
-        .legend-item { display: flex; align-items: center; font-size: 10px; gap: 8px; }
-        .box { width: 12px; height: 12px; border-radius: 2px; }
+        .notes-box {
+            flex: 2;
+            border: 1px solid var(--border);
+            padding: 10px;
+            font-size: 9px;
+            background: #fafafa;
+        }
+
+        .signature-box {
+            flex: 1;
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: center;
+            font-size: 10px;
+        }
 
         @media print {
             body { background: none; padding: 0; }
-            .page-landscape { box-shadow: none; margin: 0; }
-            .no-print { display: none; }
+            .document-container { box-shadow: none; margin: 0; }
         }
     </style>
 </head>
 <body>
 
-<div class="page-landscape">
-    <div class="header">
-        <div class="logo-area">
-            <h2>No.Do. e Servizi Srl</h2>
-            <div style="font-size: 12px; color: var(--accent);">Engineering & Project Management</div>
+<div class="document-container">
+    <div class="doc-header">
+        <div class="header-cell" style="width: 200px;">
+            <strong>No.Do. e Servizi Srl</strong>
+            <span style="font-size: 8px;">Ufficio Tecnico - Progettazione</span>
         </div>
-        <div class="info-area">
-            <strong>OFFERTA TECNICA: CLUSTER NADARA (85 MWp)</strong><br>
-            Allegato B: Programma di Emissione Documentale Esecutiva<br>
-            Rif. Document List Altenia Rev.03 (25_1587)
+        <div class="header-cell title-block">
+            <h1>Cronoprogramma di Emissione Esecutiva</h1>
+            <p>Commessa: Cluster Fotovoltaico "NADARA" (85 MWp) - Siti 01-02-03-04</p>
+        </div>
+        <div class="header-cell" style="width: 150px; font-size: 9px;">
+            Cod. Doc: <b>NDR-ING-GNT-001</b><br>
+            Revisione: <b>03 (All. Doc List)</b><br>
+            Data: <b>10/03/2026</b>
         </div>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th class="task-name">Work Breakdown Structure (WBS)</th>
+                <th class="wbs-cell">Descrizione Attività / Deliverable</th>
+                <th class="site-cell">Siti</th>
                 <script>for(let i=10; i<=24; i++) document.write(`<th class="week-col">W${i}</th>`);</script>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="task-name">Project Setup & Kick-off Meeting (Nadara 1-4)</td>
-                <td colspan="2"><div class="gantt-bar mgmt">START-UP</div></td>
+                <td class="wbs-cell">Kick-off, Analisi TDD e Congelamento Layout (Rev.0)</td>
+                <td class="site-cell">1-2-3-4</td>
+                <td colspan="2"><div class="bar b-mgmt"><span class="bar-label">SETUP</span></div></td>
                 <td colspan="13"></td>
             </tr>
             <tr>
-                <td class="task-name" style="color: var(--bar-val);">Value Engineering: Ottimizzazione BOS & Cut/Fill</td>
-                <td colspan="1"></td>
-                <td colspan="4"><div class="gantt-bar val">COST OPTIMIZATION</div></td>
+                <td class="wbs-cell" style="color: #1b5e20;">Value Engineering: Ottimizzazione Tracciati e Bilancio Terre</td>
+                <td class="site-cell">ALL</td>
+                <td></td>
+                <td colspan="4"><div class="bar b-opt"><span class="bar-label">COST SAVING ANALYSIS</span></div></td>
                 <td colspan="10"></td>
             </tr>
             <tr>
-                <td class="task-name">Civil Design: Layout, Viabilità e Drenaggi</td>
+                <td class="wbs-cell">Ingegneria Civile: Opere Idrauliche, Viabilità e Clash Detection</td>
+                <td class="site-cell">1-2-3-4</td>
                 <td colspan="2"></td>
-                <td colspan="7"><div class="gantt-bar civil">CIVIL DESIGN (REV.0)</div></td>
+                <td colspan="7"><div class="bar b-civil"><span class="bar-label">CIVIL DESIGN PHASE</span></div></td>
                 <td colspan="6"></td>
             </tr>
             <tr>
-                <td class="task-name">Ingegneria Strutturale & Fondazioni Tracker</td>
+                <td class="wbs-cell">Calcoli Strutturali e Particolari Costruttivi Fondazioni</td>
+                <td class="site-cell">1-2-3-4</td>
                 <td colspan="4"></td>
-                <td colspan="6"><div class="gantt-bar civil">STRUCTURAL CALCS</div></td>
-                <td colspan="5"></td>
+                <td colspan="5"><div class="bar b-civil"><span class="bar-label">STRUCTURAL PKG</span></div></td>
+                <td colspan="6"></td>
             </tr>
             <tr>
-                <td class="task-name">Electrical Design: DC/MT & Sistemi SCADA</td>
+                <td class="wbs-cell">Progettazione Elettrica: Dimensionamento MT/BT e Piani di Posa</td>
+                <td class="site-cell">1-2-3-4</td>
                 <td colspan="3"></td>
-                <td colspan="8"><div class="gantt-bar ele">ELECTRICAL (REV.0)</div></td>
+                <td colspan="8"><div class="bar b-ele"><span class="bar-label">ELECTRICAL PKG</span></div></td>
                 <td colspan="4"></td>
             </tr>
             <tr>
-                <td class="task-name">Secondary Permitting & Relazioni Enti (VVF/Genio)</td>
+                <td class="wbs-cell">Fascicoli per Enti (Genio Civile / VVF) e Asseverazioni</td>
+                <td class="site-cell">ALL</td>
                 <td colspan="9"></td>
-                <td colspan="4"><div class="gantt-bar perm">ASSERVERAZIONI<div class="milestone"></div></div></td>
+                <td colspan="4"><div class="bar b-perm"><span class="bar-label">SECONDARY PERMITTING</span></div></td>
                 <td colspan="2"></td>
             </tr>
             <tr>
-                <td class="task-name">Gestione Feedback Altenia & Cross-Check Siti</td>
+                <td class="wbs-cell">QA/QC Internal Review & Gestione Revisioni Altenia</td>
+                <td class="site-cell">ALL</td>
                 <td colspan="11"></td>
-                <td colspan="3"><div class="gantt-bar mgmt" style="background:#2c3e50">QA/QC REVIEW</div></td>
+                <td colspan="3"><div class="bar b-mgmt" style="background:#343a40"><span class="bar-label">FINAL REVIEW</span></div></td>
                 <td></td>
             </tr>
             <tr>
-                <td class="task-name">Emissione Finale "READY FOR CONSTRUCTION"</td>
+                <td class="wbs-cell">Emissione Finale per Costruzione (RFC)</td>
+                <td class="site-cell">1-2-3-4</td>
                 <td colspan="14"></td>
-                <td><div class="gantt-bar" style="background:var(--bar-val); justify-content:center; padding:0">RFC</div></td>
+                <td><div class="milestone-diamond"></div></td>
             </tr>
         </tbody>
     </table>
 
-    <div class="legend">
-        <div class="legend-item"><div class="box mgmt"></div> Project Management</div>
-        <div class="legend-item"><div class="box civil"></div> Ingegneria Civile</div>
-        <div class="legend-item"><div class="box ele"></div> Ingegneria Elettrica</div>
-        <div class="legend-item"><div class="box val"></div> Value Engineering</div>
-        <div class="legend-item"><div class="box perm"></div> Permitting/Enti</div>
-    </div>
-
-    <div style="margin-top: 20px; padding: 10px; background: #fdf6ec; border-left: 4px solid #f39c12; font-size: 10px;">
-        <strong>Logica di Ottimizzazione:</strong> Le attività sono schedulate per garantire la consegna dei lotti civili entro la W19, permettendo l'avvio delle asseverazioni al Genio Civile in parallelo al completamento dei dettagli elettrici (W20-21). Il focus sulla "Cost Optimization" nelle prime settimane garantisce che il progetto esecutivo sia già ottimizzato per il CAPEX.
+    <div class="footer-notes">
+        <div class="notes-box">
+            <strong>NOTE TECNICHE:</strong><br>
+            - La pianificazione assume la disponibilità dei rilievi topografici definitivi entro la W11.<br>
+            - Le attività di "Cost Saving Analysis" sono mirate alla riduzione delle sezioni cavi AC/DC e all'ottimizzazione del movimento terra (Cut&Fill).<br>
+            - Il termine W24 è vincolato alla ricezione dei feedback Altenia entro 5 giorni lavorativi dall'invio delle Rev.0.
+        </div>
+        <div class="signature-box">
+            <strong>Redatto da:</strong><br><br>
+            <i>Ufficio Tecnico No.Do.</i><br>
+            <span style="font-size: 8px;">(Ing. Senior di Commessa)</span>
+        </div>
     </div>
 </div>
 
