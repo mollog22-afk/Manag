@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Planimetria Integrata A1 - SOS, Antincendio e Riserva Idrica</title>
+    <title>Planimetria Integrata A1 - SOS, Antincendio e Riserva Idrica (TESTO CORRETTO)</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #333; margin: 0; padding: 20px; }
         .a1-page { 
@@ -34,6 +34,18 @@
         .cavedio-top { top: 0; }
         .cavedio-bottom { bottom: 0; }
 
+        /* Testo Centrale (Corretto: Bianco con opacità) */
+        .tunnel-label {
+            position: absolute; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); 
+            color: rgba(255, 255, 255, 0.4); /* Bianco con 40% opacità per leggibilità su nero */
+            font-size: 48px; 
+            font-weight: bold; 
+            letter-spacing: 12px;
+            white-space: nowrap;
+            z-index: 1; /* Sotto le postazioni SOS */
+        }
+
         /* Simboli Antincendio */
         .uni70-ext {
             width: 50px; height: 50px; background: #c0392b; border: 3px solid #fff;
@@ -50,7 +62,7 @@
         .steel { background: #bdc3c7; border: 1px solid #7f8c8d; } /* Acciaio Zincato Interno */
 
         /* SOS e Naspi (Passo 150m) */
-        .station { position: absolute; width: 50px; text-align: center; }
+        .station { position: absolute; width: 50px; text-align: center; z-index: 10; } /* Sopra il testo centrale */
         .sos-box { width: 30px; height: 40px; background: #e67e22; border: 1px solid #fff; border-radius: 3px; margin: auto; color: white; font-size: 10px; font-weight: bold; line-height: 40px; }
         .naspo-dot { width: 12px; height: 12px; background: #c0392b; border: 1px solid #fff; border-radius: 50%; margin: 5px auto; }
 
@@ -96,7 +108,7 @@
             <div class="station bottom-side" style="left: 800px;"><div class="sos-box">SOS</div><div class="naspo-dot"></div><small>0+600</small></div>
             <div class="station bottom-side" style="left: 1200px;"><div class="sos-box">SOS</div><div class="naspo-dot"></div><small>0+900</small></div>
 
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 32px; font-weight: bold; opacity: 0.2;">SVILUPPO GALLERIA (1.864 m)</div>
+            <div class="tunnel-label">SVILUPPO GALLERIA (1.864 m)</div>
         </div>
 
         <div class="area-esterna">
