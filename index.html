@@ -2,184 +2,135 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Planimetria Impianti SOS e Sicurezza - Galleria Sassoferrato</title>
+    <title>Planimetria Rete Idrica Integrata - PEAD e Acciaio</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #444; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #333; margin: 0; padding: 20px; }
         
         .a1-page { 
-            width: 2380px; /* Proporzione A1 */
+            width: 2380px; 
             height: 1100px; 
             background: white; 
             margin: auto; 
-            padding: 50px; 
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            padding: 60px; 
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
             position: relative;
-            overflow: hidden;
+            box-sizing: border-box;
         }
 
-        h1 { text-align: center; font-size: 42px; color: #1a3a5a; margin-bottom: 0; }
-        h2 { text-align: center; font-size: 22px; color: #666; margin-top: 5px; margin-bottom: 40px; }
+        h1 { text-align: center; font-size: 46px; color: #1a3a5a; margin-bottom: 10px; }
+        h2 { text-align: center; font-size: 24px; color: #666; margin-bottom: 50px; }
 
-        /* Rappresentazione Galleria */
-        .road-container {
-            width: 2200px;
-            height: 400px;
-            background: #333;
-            margin: 100px auto;
+        .main-layout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 100px;
             position: relative;
-            border-top: 8px solid #666;
-            border-bottom: 8px solid #666;
         }
 
-        /* Mezzeria */
-        .road-line {
+        /* Rappresentazione Tubazione */
+        .main-pipe {
             position: absolute;
-            top: 50%;
-            width: 100%;
-            height: 4px;
-            border-top: 6px dashed #fff;
-            transform: translateY(-50%);
-        }
-
-        /* New Jersey e Cavedio */
-        .cavedio-top, .cavedio-bottom {
-            position: absolute;
-            width: 100%;
-            height: 30px;
-            background: #999; /* Colore calcestruzzo NJ */
-        }
-        .cavedio-top { top: -38px; border-bottom: 2px solid #555; }
-        .cavedio-bottom { bottom: -38px; border-top: 2px solid #555; }
-
-        .cavedio-text {
-            position: absolute;
-            font-size: 14px;
-            color: #eee;
-            width: 100%;
-            text-align: center;
-            top: 6px;
-            font-weight: bold;
-        }
-
-        /* Postazioni SOS e Naspi */
-        .sos-station {
-            position: absolute;
-            width: 40px;
-            height: 60px;
-            text-align: center;
-        }
-
-        .sos-icon {
-            width: 30px;
-            height: 30px;
-            background: #e67e22; /* Arancione SOS */
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            line-height: 30px;
-            border-radius: 3px;
-            border: 2px solid #fff;
-        }
-
-        .naspo-icon {
-            width: 12px;
+            top: 200px;
+            left: 50px;
+            width: 2280px;
             height: 12px;
-            background: #c0392b; /* Rosso Idrante */
-            border-radius: 50%;
-            margin: 5px auto;
-            border: 1px solid #fff;
+            z-index: 5;
         }
 
-        .station-label {
-            font-size: 12px;
+        /* Tratto Esterno PEAD (Tratteggiato o Colore Diverso) */
+        .pipe-pead {
+            display: inline-block;
+            height: 100%;
+            background: #2c3e50; /* Blu scuro/Nero PEAD */
+            border: 2px solid #34495e;
+        }
+
+        /* Tratto Interno ACCIAIO (Grigio Argento) */
+        .pipe-steel {
+            display: inline-block;
+            height: 100%;
+            background: #bdc3c7; /* Grigio Acciaio */
+            border: 2px solid #7f8c8d;
+        }
+
+        .tunnel-block {
+            width: 1800px;
+            height: 350px;
+            background: #222;
+            position: relative;
+            border-top: 15px solid #444;
+            border-bottom: 15px solid #444;
+        }
+
+        /* Idranti UNI 70 Esterni */
+        .uni70-ext {
+            width: 45px;
+            height: 45px;
+            background: #c0392b;
+            border: 3px solid #fff;
+            position: absolute;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-weight: bold;
-            color: #333;
-            position: absolute;
-            white-space: nowrap;
+            font-size: 11px;
         }
 
-        /* Posizionamento automatico via classi */
-        .top-side { top: -90px; }
-        .bottom-side { bottom: -90px; }
-
-        /* Legend */
-        .legend {
-            position: absolute;
-            bottom: 60px;
-            left: 60px;
-            border: 2px solid #000;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            background: #f9f9f9;
+        /* Etichette e Legenda */
+        .footer-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 120px;
+            padding: 40px;
+            border-top: 5px solid #1a3a5a;
         }
 
-        .legend-item { display: flex; align-items: center; font-size: 18px; }
-        .color-box { width: 25px; height: 25px; margin-right: 15px; border: 1px solid #000; }
-
-        /* Cartiglio */
-        .cartiglio {
-            position: absolute;
-            bottom: 60px;
-            right: 60px;
-            width: 500px;
-            border: 2px solid #000;
-            padding: 15px;
-            font-size: 20px;
-        }
+        .legend { border: 2px solid #000; padding: 25px; background: #fdfdfd; width: 900px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .legend-item { display: flex; align-items: center; font-size: 20px; }
+        .line-pead { width: 50px; height: 10px; background: #2c3e50; margin-right: 15px; }
+        .line-steel { width: 50px; height: 10px; background: #bdc3c7; margin-right: 15px; border: 1px solid #777; }
+        
+        .cartiglio { border: 2px solid #000; width: 600px; padding: 25px; font-size: 22px; background: #f4f4f4; }
     </style>
 </head>
 <body>
 
 <div class="a1-page">
-    <h1>PLANIMETRIA DISTRIBUTIVA SOS - ANTINCENDIO - CAVEDI</h1>
-    <h2>Galleria Sassoferrato (1.864 m) - Passo costante 150m</h2>
+    <h1>RETE ANTINCENDIO INTEGRATA: DISTRIBUZIONE ESTERNA ED INTERNA</h1>
+    <h2>Galleria Sassoferrato - Dettaglio Tubazioni PEAD PN25 (Esterno) e Acciaio Zincato (Interno)</h2>
 
-    <div class="road-container">
-        <div class="cavedio-top"><div class="cavedio-text">CAVEDIO TECNICO DX (Dorsale Potenza A + SOS)</div></div>
-        <div class="road-line"></div>
-        <div class="cavedio-bottom"><div class="cavedio-text">CAVEDIO TECNICO SX (Dorsale Potenza B + Pressurizzazione)</div></div>
+    <div class="main-layout">
+        <div class="main-pipe">
+            <div class="pipe-pead" style="width: 240px;"></div> <div class="pipe-steel" style="width: 1800px;"></div> <div class="pipe-pead" style="width: 240px;"></div> </div>
 
-        <div class="sos-station top-side" style="left: 50px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+150</div> </div>
-        <div class="sos-station top-side" style="left: 220px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+300</div> </div>
-        <div class="sos-station top-side" style="left: 390px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+450</div> </div>
-        <div class="sos-station top-side" style="left: 560px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+600</div> </div>
-        <div class="sos-station top-side" style="left: 730px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+750</div> </div>
-        <div class="sos-station top-side" style="left: 900px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+900</div> </div>
-        <div class="sos-station top-side" style="left: 1070px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+050</div> </div>
-        <div class="sos-station top-side" style="left: 1240px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+200</div> </div>
-        <div class="sos-station top-side" style="left: 1410px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+350</div> </div>
-        <div class="sos-station top-side" style="left: 1580px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+500</div> </div>
-        <div class="sos-station top-side" style="left: 1750px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+650</div> </div>
-        <div class="sos-station top-side" style="left: 1920px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+800</div> </div>
+        <div class="uni70-ext" style="top: 140px; left: 80px;">UNI 70</div>
+        <div class="uni70-ext" style="top: 230px; left: 160px;">UNI 70</div>
 
-        <div class="sos-station bottom-side" style="left: 135px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+225</div> </div>
-        <div class="sos-station bottom-side" style="left: 305px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+375</div> </div>
-        <div class="sos-station bottom-side" style="left: 475px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+525</div> </div>
-        <div class="sos-station bottom-side" style="left: 645px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+675</div> </div>
-        <div class="sos-station bottom-side" style="left: 815px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+825</div> </div>
-        <div class="sos-station bottom-side" style="left: 985px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+975</div> </div>
-        <div class="sos-station bottom-side" style="left: 1155px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+125</div> </div>
-        <div class="sos-station bottom-side" style="left: 1325px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+275</div> </div>
-        <div class="sos-station bottom-side" style="left: 1495px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+425</div> </div>
-        <div class="sos-station bottom-side" style="left: 1665px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+575</div> </div>
-        <div class="sos-station bottom-side" style="left: 1835px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+725</div> </div>
-        
+        <div class="tunnel-block">
+            <div style="position: absolute; width: 100%; text-align: center; color: #555; top: 40%; font-size: 40px; font-weight: bold; opacity: 0.3;">SVILUPPO GALLERIA 1.864 m</div>
+        </div>
+
+        <div class="uni70-ext" style="top: 140px; right: 80px;">UNI 70</div>
+        <div class="uni70-ext" style="top: 230px; right: 160px;">UNI 70</div>
     </div>
 
-    <div class="legend">
-        <div class="legend-item"><div class="color-box" style="background: #e67e22;"></div> Colonnina SOS / Citofono emergenza</div>
-        <div class="legend-item"><div class="color-box" style="background: #c0392b;"></div> Naspo Antincendio UNI 45</div>
-        <div class="legend-item"><div class="color-box" style="background: #999;"></div> Profilo New Jersey / Cavedio tecnico</div>
-        <div class="legend-item"><div class="color-box" style="background: #333; border: 1px dashed #fff;"></div> Piano viabile / Carreggiata</div>
-    </div>
+    <div class="footer-info">
+        <div class="legend">
+            <div class="legend-item"><div class="line-pead"></div> Tubazione PEAD PE100 PN25 (Interrata Esterna)</div>
+            <div class="legend-item"><div class="line-steel"></div> Tubazione Acciaio Zincato DN 100/150 (Interno)</div>
+            <div class="legend-item"><div style="width: 30px; height: 30px; background: #c0392b; margin-right: 15px;"></div> Idrante Soprassuolo UNI 70</div>
+            <div class="legend-item"><div style="width: 15px; height: 15px; background: #c0392b; border-radius: 50%; margin-right: 15px;"></div> Naspi UNI 45 Interni (Passo 150m)</div>
+        </div>
 
-    <div class="cartiglio">
-        <strong>COMMITTENTE:</strong> ANAS S.p.A.<br>
-        <strong>PROGETTO:</strong> Variante Pedemontana (Lotto Fabriano-Sassoferrato)<br>
-        <strong>OGGETTO:</strong> Planimetria Postazioni SOS e Antincendio<br>
-        <strong>NOTE:</strong> Passo postazioni 150m sfalsate sui due lati.
+        <div class="cartiglio">
+            <strong>VARIANTE PEDEMONTANA DELLE MARCHE</strong><br>
+            <strong>OPERA:</strong> Galleria Sassoferrato (1.864 m)<br>
+            <strong>DISEGNO:</strong> Schema Planimetrico Rete Idrica<br>
+            <strong>MATERIALI:</strong> Acciaio Zincato / PEAD PN25
+        </div>
     </div>
 </div>
 
