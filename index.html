@@ -2,112 +2,96 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Planimetria Integrata SOS-Idrica - Galleria Sassoferrato</title>
+    <title>Schema Idrico-Elettrico Integrato - A1</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #333; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #222; margin: 0; padding: 20px; }
         .a1-page { 
-            width: 2380px; height: 1200px; background: white; margin: auto; 
-            padding: 60px; box-shadow: 0 0 50px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;
+            width: 2380px; height: 1300px; background: white; margin: auto; 
+            padding: 60px; box-shadow: 0 0 50px rgba(0,0,0,0.5); position: relative;
         }
-        h1 { text-align: center; font-size: 48px; color: #1a3a5a; margin-bottom: 5px; }
-        h2 { text-align: center; font-size: 24px; color: #666; margin-bottom: 60px; }
+        h1 { text-align: center; font-size: 44px; color: #1a3a5a; }
+        
+        /* Contenitori Cabine */
+        .substation-box {
+            width: 450px; height: 350px; border: 4px solid #2c3e50; 
+            background: #f4f7f6; padding: 20px; position: absolute; top: 200px;
+        }
+        .cab-nord { left: 60px; }
+        .cab-sud { right: 60px; }
 
-        /* Galleria e Cavedio */
-        .tunnel-container {
-            width: 2200px; height: 450px; background: #222; margin: 100px auto;
-            position: relative; border-top: 15px solid #444; border-bottom: 15px solid #444;
-        }
-        .cavedio-zone {
-            position: absolute; width: 100%; height: 45px; background: #555; /* Spazio dietro NJ */
-        }
-        .cavedio-top { top: 0; border-bottom: 2px solid #777; }
-        .cavedio-bottom { bottom: 0; border-top: 2px solid #777; }
-
-        /* Tubazione Idrica nel Cavedio */
-        .water-pipe {
-            position: absolute; width: 100%; height: 8px; 
-            background: #bdc3c7; border: 1px solid #7f8c8d; top: 50%; transform: translateY(-50%);
+        /* Galleria */
+        .tunnel-path {
+            position: absolute; top: 320px; left: 550px; width: 1280px; height: 120px;
+            background: #333; border: 5px solid #555;
         }
 
-        /* Postazioni Integrate SOS + Naspo */
-        .station {
-            position: absolute; width: 60px; height: 100px; display: flex; flex-direction: column; align-items: center;
-        }
-        .sos-box {
-            width: 35px; height: 45px; background: #e67e22; border: 2px solid #fff;
-            border-radius: 4px; color: white; font-weight: bold; font-size: 11px;
-            display: flex; align-items: center; justify-content: center; z-index: 10;
-        }
-        .naspo-box {
-            width: 20px; height: 20px; background: #c0392b; border: 2px solid #fff;
-            border-radius: 50%; margin-top: 5px; z-index: 10;
-        }
-        .pipe-connection {
-            width: 4px; height: 30px; background: #bdc3c7; position: absolute; z-index: 5;
+        /* Rete Idrica (Blu) */
+        .water-line {
+            position: absolute; top: 375px; left: 80px; width: 2220px; height: 8px;
+            background: #3498db; z-index: 10;
         }
 
-        /* Posizionamento lati */
-        .top-side { top: -85px; }
-        .top-side .pipe-connection { bottom: -20px; height: 50px; }
-        .bottom-side { bottom: -85px; }
-        .bottom-side .pipe-connection { top: -20px; height: 50px; }
-
-        /* Legend */
-        .footer-info {
-            display: flex; justify-content: space-between; margin-top: 120px;
-            padding: 40px; border-top: 5px solid #1a3a5a;
+        /* Vasca Idrica */
+        .water-tank {
+            position: absolute; bottom: 450px; right: 80px; width: 300px; height: 150px;
+            border: 4px solid #2980b9; background: #ebf5fb; text-align: center; line-height: 150px;
+            font-weight: bold; font-size: 20px; color: #2980b9;
         }
-        .legend { border: 2px solid #000; padding: 25px; background: #fdfdfd; width: 1000px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .legend-item { display: flex; align-items: center; font-size: 18px; }
-        .color-box { width: 30px; height: 30px; margin-right: 15px; border: 1px solid #000; }
 
-        .cartiglio { border: 2px solid #000; width: 600px; padding: 25px; font-size: 22px; background: #f4f4f4; }
+        /* Idranti UNI 70 */
+        .hydrant-70 {
+            width: 60px; height: 60px; background: #c0392b; color: white;
+            position: absolute; border: 3px solid #fff; display: flex;
+            align-items: center; justify-content: center; font-weight: bold; z-index: 20;
+        }
+
+        .footer-table {
+            position: absolute; bottom: 60px; left: 60px; width: 2260px;
+            display: flex; justify-content: space-between; border-top: 3px solid #000; padding-top: 30px;
+        }
     </style>
 </head>
 <body>
 
 <div class="a1-page">
-    <h1>PLANIMETRIA INTEGRATA: SOS - ANTINCENDIO - CAVEDIO TECNICO</h1>
-    <h2>Galleria Sassoferrato (1.864 m) - Dettaglio Passaggio Tubazioni dietro New Jersey</h2>
+    <h1>RETE ANTINCENDIO E DISTRIBUZIONE ELETTRICA RIDONDATA</h1>
+    <h2>Interconnessione Cabine MT e Riserva Idrica Unica con Gruppo di Spinta</h2>
 
-    <div class="tunnel-container">
-        <div class="cavedio-zone cavedio-top">
-            <div class="water-pipe"></div>
-            <div style="color: #ccc; font-size: 10px; position: absolute; width: 100%; text-align: center; top: -15px;">TUB. ACCIAIO ZINCATO DN 125</div>
-        </div>
-
-        <div class="station top-side" style="left: 150px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+150</small></div>
-        <div class="station top-side" style="left: 450px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+300</small></div>
-        <div class="station top-side" style="left: 750px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+450</small></div>
-        <div class="station top-side" style="left: 1050px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+600</small></div>
-        <div class="station top-side" style="left: 1350px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+750</small></div>
-        <div class="station top-side" style="left: 1650px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+900</small></div>
-
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 30px; font-weight: bold; letter-spacing: 10px;">AREA CARREGGIATA</div>
-
-        <div class="cavedio-zone cavedio-bottom">
-            <div class="water-pipe"></div>
-        </div>
-
-        <div class="station bottom-side" style="left: 300px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+225</small></div>
-        <div class="station bottom-side" style="left: 600px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+375</small></div>
-        <div class="station bottom-side" style="left: 900px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+525</small></div>
-        <div class="station bottom-side" style="left: 1200px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+675</small></div>
-        <div class="station bottom-side" style="left: 1500px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+825</small></div>
+    <div class="substation-box cab-nord">
+        <h3>CABINA NORD</h3>
+        <p>Alimentazione Soccorso MT</p>
+        <div style="border: 2px solid #e67e22; padding: 10px;">QUADRO SERVIZI 400V</div>
     </div>
 
-    <div class="footer-info">
-        <div class="legend">
-            <div class="legend-item"><div class="color-box" style="background: #e67e22;"></div> Colonnina SOS / Citofono (H=1.50m)</div>
-            <div class="legend-item"><div class="color-box" style="background: #c0392b; border-radius: 50%;"></div> Naspo UNI 45 con Manometro</div>
-            <div class="legend-item"><div class="color-box" style="background: #bdc3c7;"></div> Tubazione Acciaio Zincato (nel Cavedio)</div>
-            <div class="legend-item"><div class="color-box" style="background: #555;"></div> Cavedio Tecnico ispezionabile retro NJ</div>
+    <div class="tunnel-path">
+        <div style="color: white; text-align: center; line-height: 120px; font-size: 24px;">GALLERIA (1.864 m) - TUBAZIONE IN CAVEDIO</div>
+    </div>
+
+    <div class="substation-box cab-sud">
+        <h3>CABINA SUD</h3>
+        <p>Alimentazione Primaria Gruppo Pompe</p>
+        <div style="border: 2px solid #c0392b; padding: 10px; background: #fdedec;">GRUPPO POMPE UNI EN 12845</div>
+    </div>
+
+    <div class="water-tank">VASCA RISERVA IDRICA (60-120 m³)</div>
+    <div class="water-line"></div>
+
+    <div class="hydrant-70" style="top: 350px; left: 150px;">UNI 70</div>
+    <div class="hydrant-70" style="top: 450px; left: 150px;">UNI 70</div>
+    <div class="hydrant-70" style="top: 350px; right: 150px;">UNI 70</div>
+    <div class="hydrant-70" style="top: 450px; right: 150px;">UNI 70</div>
+
+    <div class="footer-table">
+        <div style="width: 800px; font-size: 20px;">
+            <strong>NOTE TECNICHE:</strong><br>
+            - La riserva idrica è unica per ottimizzare la manutenzione.<br>
+            - Il Gruppo Pompe è alimentato in "doppia derivazione" dalle due cabine.<br>
+            - Gli idranti UNI 70 esterni sono alimentati dalla dorsale PEAD PN25.
         </div>
-        <div class="cartiglio">
-            <strong>VARIANTE PEDEMONTANA DELLE MARCHE</strong><br>
-            <strong>OPERA:</strong> Galleria Sassoferrato (1.864 m)<br>
-            <strong>DISEGNO:</strong> Layout Integrato Idrico-SOS (Cavedio Tecnico)<br>
-            <strong>REQUISITI:</strong> Conforme D.Lgs 264/06 (Passo 150m)
+        <div style="border: 1px solid #000; padding: 20px; width: 500px; font-size: 22px;">
+            <strong>PROGETTO:</strong> Variante Pedemontana<br>
+            <strong>OGGETTO:</strong> Schema Idrico-Elettrico Integrato<br>
+            <strong>SCALA:</strong> A1 (N.T.S.)
         </div>
     </div>
 </div>
