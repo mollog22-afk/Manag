@@ -2,96 +2,128 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Schema Idrico-Elettrico Integrato - A1</title>
+    <title>Planimetria Integrata A1 - SOS, Antincendio e Riserva Idrica</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #222; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #333; margin: 0; padding: 20px; }
         .a1-page { 
-            width: 2380px; height: 1300px; background: white; margin: auto; 
-            padding: 60px; box-shadow: 0 0 50px rgba(0,0,0,0.5); position: relative;
+            width: 2380px; height: 1200px; background: white; margin: auto; 
+            padding: 60px; box-shadow: 0 0 50px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;
         }
-        h1 { text-align: center; font-size: 44px; color: #1a3a5a; }
-        
-        /* Contenitori Cabine */
-        .substation-box {
-            width: 450px; height: 350px; border: 4px solid #2c3e50; 
-            background: #f4f7f6; padding: 20px; position: absolute; top: 200px;
-        }
-        .cab-nord { left: 60px; }
-        .cab-sud { right: 60px; }
+        h1 { text-align: center; font-size: 44px; color: #1a3a5a; margin-bottom: 5px; }
+        h2 { text-align: center; font-size: 22px; color: #666; margin-bottom: 40px; }
 
-        /* Galleria */
-        .tunnel-path {
-            position: absolute; top: 320px; left: 550px; width: 1280px; height: 120px;
-            background: #333; border: 5px solid #555;
+        /* Contenitore Planimetrico */
+        .plan-container {
+            display: flex; align-items: center; justify-content: space-between; margin-top: 120px;
         }
 
-        /* Rete Idrica (Blu) */
-        .water-line {
-            position: absolute; top: 375px; left: 80px; width: 2220px; height: 8px;
-            background: #3498db; z-index: 10;
+        /* Aree Esterne (Piazzali) */
+        .area-esterna {
+            width: 300px; height: 500px; border: 2px dashed #999; position: relative; background: #f0f0f0;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px;
         }
 
-        /* Vasca Idrica */
-        .water-tank {
-            position: absolute; bottom: 450px; right: 80px; width: 300px; height: 150px;
-            border: 4px solid #2980b9; background: #ebf5fb; text-align: center; line-height: 150px;
-            font-weight: bold; font-size: 20px; color: #2980b9;
+        /* Galleria e Cavedio */
+        .tunnel-section {
+            width: 1600px; height: 400px; background: #222; position: relative;
+            border-top: 15px solid #444; border-bottom: 15px solid #444;
+        }
+        .cavedio {
+            position: absolute; width: 100%; height: 40px; background: #555;
+        }
+        .cavedio-top { top: 0; }
+        .cavedio-bottom { bottom: 0; }
+
+        /* Simboli Antincendio */
+        .uni70-ext {
+            width: 50px; height: 50px; background: #c0392b; border: 3px solid #fff;
+            color: white; font-weight: bold; font-size: 11px; display: flex; align-items: center; justify-content: center;
+        }
+        .vasca-idrica {
+            width: 180px; height: 100px; border: 3px solid #2980b9; background: #d6eaf8;
+            text-align: center; font-weight: bold; font-size: 14px; padding-top: 10px;
         }
 
-        /* Idranti UNI 70 */
-        .hydrant-70 {
-            width: 60px; height: 60px; background: #c0392b; color: white;
-            position: absolute; border: 3px solid #fff; display: flex;
-            align-items: center; justify-content: center; font-weight: bold; z-index: 20;
-        }
+        /* Tubazione Idrica */
+        .pipe { position: absolute; height: 8px; z-index: 5; }
+        .pead { background: #2c3e50; } /* PEAD PN25 Esterno */
+        .steel { background: #bdc3c7; border: 1px solid #7f8c8d; } /* Acciaio Zincato Interno */
 
-        .footer-table {
-            position: absolute; bottom: 60px; left: 60px; width: 2260px;
-            display: flex; justify-content: space-between; border-top: 3px solid #000; padding-top: 30px;
+        /* SOS e Naspi (Passo 150m) */
+        .station { position: absolute; width: 50px; text-align: center; }
+        .sos-box { width: 30px; height: 40px; background: #e67e22; border: 1px solid #fff; border-radius: 3px; margin: auto; color: white; font-size: 10px; font-weight: bold; line-height: 40px; }
+        .naspo-dot { width: 12px; height: 12px; background: #c0392b; border: 1px solid #fff; border-radius: 50%; margin: 5px auto; }
+
+        .top-side { top: -85px; }
+        .bottom-side { bottom: -85px; }
+
+        /* Legenda e Cartiglio */
+        .footer {
+            display: flex; justify-content: space-between; margin-top: 100px; padding: 30px; border-top: 4px solid #1a3a5a;
         }
+        .legend { border: 2px solid #000; padding: 20px; background: #fdfdfd; width: 1000px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 18px; }
+        .cartiglio { border: 2px solid #000; width: 600px; padding: 20px; font-size: 20px; background: #eee; }
     </style>
 </head>
 <body>
 
 <div class="a1-page">
-    <h1>RETE ANTINCENDIO E DISTRIBUZIONE ELETTRICA RIDONDATA</h1>
-    <h2>Interconnessione Cabine MT e Riserva Idrica Unica con Gruppo di Spinta</h2>
+    <h1>PLANIMETRIA GENERALE: SOS, RETE IDRICA E RISERVA ANTINCENDIO</h1>
+    <h2>Galleria Sassoferrato (1.864 m) - Dettaglio Idranti UNI 70 Esterni e Vasca di Accumulo</h2>
 
-    <div class="substation-box cab-nord">
-        <h3>CABINA NORD</h3>
-        <p>Alimentazione Soccorso MT</p>
-        <div style="border: 2px solid #e67e22; padding: 10px;">QUADRO SERVIZI 400V</div>
-    </div>
-
-    <div class="tunnel-path">
-        <div style="color: white; text-align: center; line-height: 120px; font-size: 24px;">GALLERIA (1.864 m) - TUBAZIONE IN CAVEDIO</div>
-    </div>
-
-    <div class="substation-box cab-sud">
-        <h3>CABINA SUD</h3>
-        <p>Alimentazione Primaria Gruppo Pompe</p>
-        <div style="border: 2px solid #c0392b; padding: 10px; background: #fdedec;">GRUPPO POMPE UNI EN 12845</div>
-    </div>
-
-    <div class="water-tank">VASCA RISERVA IDRICA (60-120 m³)</div>
-    <div class="water-line"></div>
-
-    <div class="hydrant-70" style="top: 350px; left: 150px;">UNI 70</div>
-    <div class="hydrant-70" style="top: 450px; left: 150px;">UNI 70</div>
-    <div class="hydrant-70" style="top: 350px; right: 150px;">UNI 70</div>
-    <div class="hydrant-70" style="top: 450px; right: 150px;">UNI 70</div>
-
-    <div class="footer-table">
-        <div style="width: 800px; font-size: 20px;">
-            <strong>NOTE TECNICHE:</strong><br>
-            - La riserva idrica è unica per ottimizzare la manutenzione.<br>
-            - Il Gruppo Pompe è alimentato in "doppia derivazione" dalle due cabine.<br>
-            - Gli idranti UNI 70 esterni sono alimentati dalla dorsale PEAD PN25.
+    <div class="plan-container">
+        <div class="area-esterna">
+            <div class="uni70-ext">UNI 70</div>
+            <div class="uni70-ext">UNI 70</div>
+            <div style="font-weight: bold; color: #c0392b;">IDRANTI ESTERNI NORD</div>
         </div>
-        <div style="border: 1px solid #000; padding: 20px; width: 500px; font-size: 22px;">
-            <strong>PROGETTO:</strong> Variante Pedemontana<br>
-            <strong>OGGETTO:</strong> Schema Idrico-Elettrico Integrato<br>
-            <strong>SCALA:</strong> A1 (N.T.S.)
+
+        <div class="tunnel-section">
+            <div class="cavedio cavedio-top">
+                <div class="pipe steel" style="width: 100%; top: 15px;"></div>
+            </div>
+            
+            <div class="station top-side" style="left: 200px;"><div class="sos-box">SOS</div><div class="naspo-dot"></div><small>0+150</small></div>
+            <div class="station top-side" style="left: 600px;"><div class="sos-box">SOS</div><div class="naspo-dot"></div><small>0+450</small></div>
+            <div class="station top-side" style="left: 1000px;"><div class="sos-box">SOS</div><div class="naspo-dot"></div><small>0+750</small></div>
+            <div class="station top-side" style="left: 1400px;"><div class="sos-box">SOS</div><div class="naspo-dot"></div><small>1+050</small></div>
+
+            <div class="cavedio cavedio-bottom">
+                <div class="pipe steel" style="width: 100%; top: 15px;"></div>
+            </div>
+
+            <div class="station bottom-side" style="left: 400px;"><div class="sos-box">SOS</div><div class="naspo-dot"></div><small>0+300</small></div>
+            <div class="station bottom-side" style="left: 800px;"><div class="sos-box">SOS</div><div class="naspo-dot"></div><small>0+600</small></div>
+            <div class="station bottom-side" style="left: 1200px;"><div class="sos-box">SOS</div><div class="naspo-dot"></div><small>0+900</small></div>
+
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 32px; font-weight: bold; opacity: 0.2;">SVILUPPO GALLERIA (1.864 m)</div>
+        </div>
+
+        <div class="area-esterna">
+            <div class="vasca-idrica">RISERVA IDRICA<br>+ GRUPPO POMPE<br>(Locali Tecnici Sud)</div>
+            <div style="display: flex; gap: 20px;">
+                <div class="uni70-ext">UNI 70</div>
+                <div class="uni70-ext">UNI 70</div>
+            </div>
+            <div style="font-weight: bold; color: #c0392b;">IDRANTI ESTERNI SUD</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="legend">
+            <div class="legend-item"><div style="width: 30px; height: 10px; background: #2c3e50; margin-right: 15px;"></div> Tubazione PEAD PN25 (Interrata Esterna)</div>
+            <div class="legend-item"><div style="width: 30px; height: 10px; background: #bdc3c7; border: 1px solid #777; margin-right: 15px;"></div> Tubazione Acciaio Zincato (Cavedio Interno)</div>
+            <div class="legend-item"><div style="width: 25px; height: 25px; background: #c0392b; margin-right: 15px;"></div> Idrante Soprassuolo UNI 70</div>
+            <div class="legend-item"><div style="width: 15px; height: 15px; background: #c0392b; border-radius: 50%; margin-right: 15px;"></div> Naspo UNI 45 (Interno)</div>
+            <div class="legend-item"><div style="width: 25px; height: 25px; background: #e67e22; margin-right: 15px;"></div> Colonnina SOS / Citofonia</div>
+            <div class="legend-item"><div style="width: 40px; height: 20px; background: #d6eaf8; border: 1px solid #2980b9; margin-right: 15px;"></div> Riserva Idrica / Centrale Antincendio</div>
+        </div>
+
+        <div class="cartiglio">
+            <strong>PEDEMONTANA DELLE MARCHE</strong><br>
+            <strong>OPERA:</strong> Galleria Sassoferrato (1.864 m)<br>
+            <strong>DISEGNO:</strong> Layout SOS - Rete Idrica Integrata<br>
+            <strong>FORMATO:</strong> A1 - Progetto Definitivo
         </div>
     </div>
 </div>
