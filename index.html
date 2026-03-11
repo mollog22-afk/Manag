@@ -2,236 +2,184 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <title>Planimetria Impianti SOS e Sicurezza - Galleria Sassoferrato</title>
     <style>
-        /* CONFIGURAZIONE FISICA A3 */
-        @page { 
-            size: A3 landscape; 
-            margin: 10mm; 
-        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #444; margin: 0; padding: 20px; }
         
-        body { 
-            margin: 0; 
-            padding: 0; 
-            background: #f0f0f0; 
-            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+        .a1-page { 
+            width: 2380px; /* Proporzione A1 */
+            height: 1100px; 
+            background: white; 
+            margin: auto; 
+            padding: 50px; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
         }
 
-        .a3-container {
-            width: 400mm; /* Dimensioni A3 meno i margini */
-            height: 277mm;
-            margin: 10px auto;
-            background: white;
-            padding: 15mm;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        h1 { text-align: center; font-size: 42px; color: #1a3a5a; margin-bottom: 0; }
+        h2 { text-align: center; font-size: 22px; color: #666; margin-top: 5px; margin-bottom: 40px; }
+
+        /* Rappresentazione Galleria */
+        .road-container {
+            width: 2200px;
+            height: 400px;
+            background: #333;
+            margin: 100px auto;
+            position: relative;
+            border-top: 8px solid #666;
+            border-bottom: 8px solid #666;
         }
 
-        /* HEADER PROFESSIONALE */
-        .header {
-            display: grid;
-            grid-template-columns: 1.5fr 3fr 1.5fr;
-            border: 2px solid #0a2540;
-            margin-bottom: 20px;
-        }
-
-        .h-cell {
-            padding: 15px;
-            border-right: 2px solid #0a2540;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .h-cell:last-child { border-right: none; }
-        .h-cell b { color: #0a2540; font-size: 14px; text-transform: uppercase; }
-
-        /* TABELLA GANTT SU SCALA A3 */
-        table {
+        /* Mezzeria */
+        .road-line {
+            position: absolute;
+            top: 50%;
             width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            margin-bottom: 30px;
+            height: 4px;
+            border-top: 6px dashed #fff;
+            transform: translateY(-50%);
         }
 
-        th {
-            background: #0a2540;
-            color: white;
-            font-size: 12px;
-            padding: 12px 5px;
-            border: 1px solid #fff;
-            text-transform: uppercase;
+        /* New Jersey e Cavedio */
+        .cavedio-top, .cavedio-bottom {
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background: #999; /* Colore calcestruzzo NJ */
+        }
+        .cavedio-top { top: -38px; border-bottom: 2px solid #555; }
+        .cavedio-bottom { bottom: -38px; border-top: 2px solid #555; }
+
+        .cavedio-text {
+            position: absolute;
+            font-size: 14px;
+            color: #eee;
+            width: 100%;
+            text-align: center;
+            top: 6px;
+            font-weight: bold;
         }
 
-        td {
-            border: 1px solid #ccc;
-            height: 35px;
-            font-size: 12px;
+        /* Postazioni SOS e Naspi */
+        .sos-station {
+            position: absolute;
+            width: 40px;
+            height: 60px;
             text-align: center;
         }
 
-        .task-col { 
-            width: 350px; 
-            text-align: left; 
-            padding-left: 15px; 
-            font-weight: bold; 
-            background: #f9f9f9;
-            color: #333;
-        }
-
-        .site-col { width: 60px; font-weight: bold; color: #666; }
-        .w-col { width: 45px; background: #fdfdfd; }
-
-        /* BARRE GRAFICHE */
-        .bar {
-            height: 20px;
-            margin: 0 2px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .sos-icon {
+            width: 30px;
+            height: 30px;
+            background: #e67e22; /* Arancione SOS */
             color: white;
             font-size: 10px;
             font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            line-height: 30px;
+            border-radius: 3px;
+            border: 2px solid #fff;
         }
 
-        .b-mgmt { background: #34495e; }
-        .b-civil { background: #c0392b; }
-        .b-ele { background: #2980b9; }
-        .b-opt { background: #27ae60; }
-        .b-final { background: #000; }
-
-        /* SEZIONE KOM - PIU' SPAZIO SU A3 */
-        .kom-section {
-            border: 2px solid #0a2540;
-            background: #f8fafc;
-            padding: 20px;
-            flex-grow: 1;
+        .naspo-icon {
+            width: 12px;
+            height: 12px;
+            background: #c0392b; /* Rosso Idrante */
+            border-radius: 50%;
+            margin: 5px auto;
+            border: 1px solid #fff;
         }
 
-        .kom-header {
-            font-size: 16px;
+        .station-label {
+            font-size: 12px;
             font-weight: bold;
-            color: #0a2540;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #0a2540;
-            display: inline-block;
+            color: #333;
+            position: absolute;
+            white-space: nowrap;
         }
 
-        .kom-grid {
+        /* Posizionamento automatico via classi */
+        .top-side { top: -90px; }
+        .bottom-side { bottom: -90px; }
+
+        /* Legend */
+        .legend {
+            position: absolute;
+            bottom: 60px;
+            left: 60px;
+            border: 2px solid #000;
+            padding: 20px;
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f9f9f9;
         }
 
-        .kom-card {
-            background: white;
+        .legend-item { display: flex; align-items: center; font-size: 18px; }
+        .color-box { width: 25px; height: 25px; margin-right: 15px; border: 1px solid #000; }
+
+        /* Cartiglio */
+        .cartiglio {
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            width: 500px;
+            border: 2px solid #000;
             padding: 15px;
-            border: 1px solid #cbd5e1;
-            border-top: 5px solid #0a2540;
-        }
-
-        .kom-card b { font-size: 13px; color: #0a2540; display: block; margin-bottom: 8px; }
-        .kom-card p { margin: 0; font-size: 12px; line-height: 1.5; color: #475569; }
-
-        .footer {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: #64748b;
-        }
-
-        /* FIX STAMPA */
-        @media print {
-            body { background: none; }
-            .a3-container { box-shadow: none; margin: 0; width: 100%; }
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
 
-<div class="a3-container">
-    <div class="header">
-        <div class="h-cell">
-            <b>No.Do. e Servizi Srl</b>
-            <span style="font-size: 11px;">Engineering & Project Management</span>
-        </div>
-        <div class="h-cell" style="text-align:center">
-            <b style="font-size:18px">Programma Emissione Documentazione Tecnica (Rev. 03)</b><br>
-            <span style="font-size: 14px;">Cluster Nadara (85 MWp) - Progettazione Esecutiva Lotti 01-04</span>
-        </div>
-        <div class="h-cell">
-            Ref: <b>NDR-ING-GNT-2026</b><br>
-            Data: <b>10/03/2026</b>
-        </div>
+<div class="a1-page">
+    <h1>PLANIMETRIA DISTRIBUTIVA SOS - ANTINCENDIO - CAVEDI</h1>
+    <h2>Galleria Sassoferrato (1.864 m) - Passo costante 150m</h2>
+
+    <div class="road-container">
+        <div class="cavedio-top"><div class="cavedio-text">CAVEDIO TECNICO DX (Dorsale Potenza A + SOS)</div></div>
+        <div class="road-line"></div>
+        <div class="cavedio-bottom"><div class="cavedio-text">CAVEDIO TECNICO SX (Dorsale Potenza B + Pressurizzazione)</div></div>
+
+        <div class="sos-station top-side" style="left: 50px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+150</div> </div>
+        <div class="sos-station top-side" style="left: 220px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+300</div> </div>
+        <div class="sos-station top-side" style="left: 390px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+450</div> </div>
+        <div class="sos-station top-side" style="left: 560px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+600</div> </div>
+        <div class="sos-station top-side" style="left: 730px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+750</div> </div>
+        <div class="sos-station top-side" style="left: 900px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+900</div> </div>
+        <div class="sos-station top-side" style="left: 1070px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+050</div> </div>
+        <div class="sos-station top-side" style="left: 1240px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+200</div> </div>
+        <div class="sos-station top-side" style="left: 1410px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+350</div> </div>
+        <div class="sos-station top-side" style="left: 1580px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+500</div> </div>
+        <div class="sos-station top-side" style="left: 1750px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+650</div> </div>
+        <div class="sos-station top-side" style="left: 1920px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+800</div> </div>
+
+        <div class="sos-station bottom-side" style="left: 135px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+225</div> </div>
+        <div class="sos-station bottom-side" style="left: 305px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+375</div> </div>
+        <div class="sos-station bottom-side" style="left: 475px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+525</div> </div>
+        <div class="sos-station bottom-side" style="left: 645px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+675</div> </div>
+        <div class="sos-station bottom-side" style="left: 815px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+825</div> </div>
+        <div class="sos-station bottom-side" style="left: 985px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 0+975</div> </div>
+        <div class="sos-station bottom-side" style="left: 1155px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+125</div> </div>
+        <div class="sos-station bottom-side" style="left: 1325px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+275</div> </div>
+        <div class="sos-station bottom-side" style="left: 1495px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+425</div> </div>
+        <div class="sos-station bottom-side" style="left: 1665px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+575</div> </div>
+        <div class="sos-station bottom-side" style="left: 1835px;"> <div class="sos-icon">SOS</div><div class="naspo-icon"></div><div class="station-label">km 1+725</div> </div>
+        
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th class="task-col">Attività di Ingegneria / Milestone</th>
-                <th class="site-col">Siti</th>
-                <script>for(let i=10; i<=24; i++) document.write(`<th class="w-col">W${i}</th>`);</script>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="task-col">Kick-off Meeting & Setup Commessa</td>
-                <td class="site-col">ALL</td>
-                <td colspan="2"><div class="bar b-mgmt">KOM SETUP</div></td><td colspan="13"></td>
-            </tr>
-            <tr>
-                <td class="task-col" style="color:#27ae60">Value Engineering: Ottimizzazione BOS & Cut/Fill</td>
-                <td class="site-col">1-2-3-4</td>
-                <td></td><td colspan="4"><div class="bar b-opt">COST SAVING</div></td><td colspan="10"></td>
-            </tr>
-            <tr>
-                <td class="task-col">Progettazione Civile: Idraulica, Viabilità e Strutture</td>
-                <td class="site-col">1-2-3-4</td>
-                <td colspan="2"></td><td colspan="8"><div class="bar b-civil">CIVIL DESIGN PHASE</div></td><td colspan="5"></td>
-            </tr>
-            <tr>
-                <td class="task-col">Ingegneria Elettrica: Cablaggi MT, Quadri e SCADA</td>
-                <td class="site-col">1-2-3-4</td>
-                <td colspan="3"></td><td colspan="9"><div class="bar b-ele">ELECTRICAL PKG</div></td><td colspan="3"></td>
-            </tr>
-            <tr>
-                <td class="task-col">Secondary Permitting & Asseverazioni (VVF/Genio)</td>
-                <td class="site-col">ALL</td>
-                <td colspan="10"></td><td colspan="4"><div class="bar b-mgmt" style="background:#8e44ad">PERMITS</div></td><td></td>
-            </tr>
-            <tr>
-                <td class="task-col" style="background:#eee">Ready for Construction (RFC) - Final Emission</td>
-                <td class="site-col">ALL</td>
-                <td colspan="14"></td><td style="background:#000; color:white; font-weight:bold">RFC</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="kom-section">
-        <div class="kom-header">Dettaglio Strategico Kick-off Meeting (W10)</div>
-        <div class="kom-grid">
-            <div class="kom-card">
-                <b>01. Validazione Input</b>
-                <p>Verifica dei rilievi topografici e delle indagini geotecniche per i 4 siti. Congelamento dei perimetri e dei vincoli ambientali.</p>
-            </div>
-            <div class="kom-card">
-                <b>02. Protocolli di Commessa</b>
-                <p>Definizione degli standard grafici e dei flussi di approvazione documenti secondo la Document List Altenia Rev. 03.</p>
-            </div>
-            <div class="kom-card">
-                <b>03. Obiettivi Value Engineering</b>
-                <p>Analisi preliminare per la riduzione del CAPEX attraverso l'ottimizzazione del bilanciamento terre e delle sezioni cavidotti.</p>
-            </div>
-        </div>
+    <div class="legend">
+        <div class="legend-item"><div class="color-box" style="background: #e67e22;"></div> Colonnina SOS / Citofono emergenza</div>
+        <div class="legend-item"><div class="color-box" style="background: #c0392b;"></div> Naspo Antincendio UNI 45</div>
+        <div class="legend-item"><div class="color-box" style="background: #999;"></div> Profilo New Jersey / Cavedio tecnico</div>
+        <div class="legend-item"><div class="color-box" style="background: #333; border: 1px dashed #fff;"></div> Piano viabile / Carreggiata</div>
     </div>
 
-    <div class="footer">
-        <div>* Nota: La pianificazione assume la ricezione di tutti i dati di input entro la W11.</div>
-        <div style="font-weight: bold; color: #333;">Responsabile di Commessa: Ing. Francesco Guido</div>
+    <div class="cartiglio">
+        <strong>COMMITTENTE:</strong> ANAS S.p.A.<br>
+        <strong>PROGETTO:</strong> Variante Pedemontana (Lotto Fabriano-Sassoferrato)<br>
+        <strong>OGGETTO:</strong> Planimetria Postazioni SOS e Antincendio<br>
+        <strong>NOTE:</strong> Passo postazioni 150m sfalsate sui due lati.
     </div>
 </div>
 
