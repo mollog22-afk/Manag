@@ -2,134 +2,112 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Planimetria Rete Idrica Integrata - PEAD e Acciaio</title>
+    <title>Planimetria Integrata SOS-Idrica - Galleria Sassoferrato</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #333; margin: 0; padding: 20px; }
-        
+        body { font-family: 'Segoe UI', sans-serif; background: #333; margin: 0; padding: 20px; }
         .a1-page { 
-            width: 2380px; 
-            height: 1100px; 
-            background: white; 
-            margin: auto; 
-            padding: 60px; 
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            position: relative;
-            box-sizing: border-box;
+            width: 2380px; height: 1200px; background: white; margin: auto; 
+            padding: 60px; box-shadow: 0 0 50px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;
+        }
+        h1 { text-align: center; font-size: 48px; color: #1a3a5a; margin-bottom: 5px; }
+        h2 { text-align: center; font-size: 24px; color: #666; margin-bottom: 60px; }
+
+        /* Galleria e Cavedio */
+        .tunnel-container {
+            width: 2200px; height: 450px; background: #222; margin: 100px auto;
+            position: relative; border-top: 15px solid #444; border-bottom: 15px solid #444;
+        }
+        .cavedio-zone {
+            position: absolute; width: 100%; height: 45px; background: #555; /* Spazio dietro NJ */
+        }
+        .cavedio-top { top: 0; border-bottom: 2px solid #777; }
+        .cavedio-bottom { bottom: 0; border-top: 2px solid #777; }
+
+        /* Tubazione Idrica nel Cavedio */
+        .water-pipe {
+            position: absolute; width: 100%; height: 8px; 
+            background: #bdc3c7; border: 1px solid #7f8c8d; top: 50%; transform: translateY(-50%);
         }
 
-        h1 { text-align: center; font-size: 46px; color: #1a3a5a; margin-bottom: 10px; }
-        h2 { text-align: center; font-size: 24px; color: #666; margin-bottom: 50px; }
-
-        .main-layout {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 100px;
-            position: relative;
+        /* Postazioni Integrate SOS + Naspo */
+        .station {
+            position: absolute; width: 60px; height: 100px; display: flex; flex-direction: column; align-items: center;
+        }
+        .sos-box {
+            width: 35px; height: 45px; background: #e67e22; border: 2px solid #fff;
+            border-radius: 4px; color: white; font-weight: bold; font-size: 11px;
+            display: flex; align-items: center; justify-content: center; z-index: 10;
+        }
+        .naspo-box {
+            width: 20px; height: 20px; background: #c0392b; border: 2px solid #fff;
+            border-radius: 50%; margin-top: 5px; z-index: 10;
+        }
+        .pipe-connection {
+            width: 4px; height: 30px; background: #bdc3c7; position: absolute; z-index: 5;
         }
 
-        /* Rappresentazione Tubazione */
-        .main-pipe {
-            position: absolute;
-            top: 200px;
-            left: 50px;
-            width: 2280px;
-            height: 12px;
-            z-index: 5;
-        }
+        /* Posizionamento lati */
+        .top-side { top: -85px; }
+        .top-side .pipe-connection { bottom: -20px; height: 50px; }
+        .bottom-side { bottom: -85px; }
+        .bottom-side .pipe-connection { top: -20px; height: 50px; }
 
-        /* Tratto Esterno PEAD (Tratteggiato o Colore Diverso) */
-        .pipe-pead {
-            display: inline-block;
-            height: 100%;
-            background: #2c3e50; /* Blu scuro/Nero PEAD */
-            border: 2px solid #34495e;
-        }
-
-        /* Tratto Interno ACCIAIO (Grigio Argento) */
-        .pipe-steel {
-            display: inline-block;
-            height: 100%;
-            background: #bdc3c7; /* Grigio Acciaio */
-            border: 2px solid #7f8c8d;
-        }
-
-        .tunnel-block {
-            width: 1800px;
-            height: 350px;
-            background: #222;
-            position: relative;
-            border-top: 15px solid #444;
-            border-bottom: 15px solid #444;
-        }
-
-        /* Idranti UNI 70 Esterni */
-        .uni70-ext {
-            width: 45px;
-            height: 45px;
-            background: #c0392b;
-            border: 3px solid #fff;
-            position: absolute;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 11px;
-        }
-
-        /* Etichette e Legenda */
+        /* Legend */
         .footer-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 120px;
-            padding: 40px;
-            border-top: 5px solid #1a3a5a;
+            display: flex; justify-content: space-between; margin-top: 120px;
+            padding: 40px; border-top: 5px solid #1a3a5a;
         }
+        .legend { border: 2px solid #000; padding: 25px; background: #fdfdfd; width: 1000px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .legend-item { display: flex; align-items: center; font-size: 18px; }
+        .color-box { width: 30px; height: 30px; margin-right: 15px; border: 1px solid #000; }
 
-        .legend { border: 2px solid #000; padding: 25px; background: #fdfdfd; width: 900px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .legend-item { display: flex; align-items: center; font-size: 20px; }
-        .line-pead { width: 50px; height: 10px; background: #2c3e50; margin-right: 15px; }
-        .line-steel { width: 50px; height: 10px; background: #bdc3c7; margin-right: 15px; border: 1px solid #777; }
-        
         .cartiglio { border: 2px solid #000; width: 600px; padding: 25px; font-size: 22px; background: #f4f4f4; }
     </style>
 </head>
 <body>
 
 <div class="a1-page">
-    <h1>RETE ANTINCENDIO INTEGRATA: DISTRIBUZIONE ESTERNA ED INTERNA</h1>
-    <h2>Galleria Sassoferrato - Dettaglio Tubazioni PEAD PN25 (Esterno) e Acciaio Zincato (Interno)</h2>
+    <h1>PLANIMETRIA INTEGRATA: SOS - ANTINCENDIO - CAVEDIO TECNICO</h1>
+    <h2>Galleria Sassoferrato (1.864 m) - Dettaglio Passaggio Tubazioni dietro New Jersey</h2>
 
-    <div class="main-layout">
-        <div class="main-pipe">
-            <div class="pipe-pead" style="width: 240px;"></div> <div class="pipe-steel" style="width: 1800px;"></div> <div class="pipe-pead" style="width: 240px;"></div> </div>
-
-        <div class="uni70-ext" style="top: 140px; left: 80px;">UNI 70</div>
-        <div class="uni70-ext" style="top: 230px; left: 160px;">UNI 70</div>
-
-        <div class="tunnel-block">
-            <div style="position: absolute; width: 100%; text-align: center; color: #555; top: 40%; font-size: 40px; font-weight: bold; opacity: 0.3;">SVILUPPO GALLERIA 1.864 m</div>
+    <div class="tunnel-container">
+        <div class="cavedio-zone cavedio-top">
+            <div class="water-pipe"></div>
+            <div style="color: #ccc; font-size: 10px; position: absolute; width: 100%; text-align: center; top: -15px;">TUB. ACCIAIO ZINCATO DN 125</div>
         </div>
 
-        <div class="uni70-ext" style="top: 140px; right: 80px;">UNI 70</div>
-        <div class="uni70-ext" style="top: 230px; right: 160px;">UNI 70</div>
+        <div class="station top-side" style="left: 150px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+150</small></div>
+        <div class="station top-side" style="left: 450px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+300</small></div>
+        <div class="station top-side" style="left: 750px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+450</small></div>
+        <div class="station top-side" style="left: 1050px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+600</small></div>
+        <div class="station top-side" style="left: 1350px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+750</small></div>
+        <div class="station top-side" style="left: 1650px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+900</small></div>
+
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 30px; font-weight: bold; letter-spacing: 10px;">AREA CARREGGIATA</div>
+
+        <div class="cavedio-zone cavedio-bottom">
+            <div class="water-pipe"></div>
+        </div>
+
+        <div class="station bottom-side" style="left: 300px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+225</small></div>
+        <div class="station bottom-side" style="left: 600px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+375</small></div>
+        <div class="station bottom-side" style="left: 900px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+525</small></div>
+        <div class="station bottom-side" style="left: 1200px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+675</small></div>
+        <div class="station bottom-side" style="left: 1500px;"><div class="sos-box">SOS</div><div class="naspo-box"></div><div class="pipe-connection"></div><small>0+825</small></div>
     </div>
 
     <div class="footer-info">
         <div class="legend">
-            <div class="legend-item"><div class="line-pead"></div> Tubazione PEAD PE100 PN25 (Interrata Esterna)</div>
-            <div class="legend-item"><div class="line-steel"></div> Tubazione Acciaio Zincato DN 100/150 (Interno)</div>
-            <div class="legend-item"><div style="width: 30px; height: 30px; background: #c0392b; margin-right: 15px;"></div> Idrante Soprassuolo UNI 70</div>
-            <div class="legend-item"><div style="width: 15px; height: 15px; background: #c0392b; border-radius: 50%; margin-right: 15px;"></div> Naspi UNI 45 Interni (Passo 150m)</div>
+            <div class="legend-item"><div class="color-box" style="background: #e67e22;"></div> Colonnina SOS / Citofono (H=1.50m)</div>
+            <div class="legend-item"><div class="color-box" style="background: #c0392b; border-radius: 50%;"></div> Naspo UNI 45 con Manometro</div>
+            <div class="legend-item"><div class="color-box" style="background: #bdc3c7;"></div> Tubazione Acciaio Zincato (nel Cavedio)</div>
+            <div class="legend-item"><div class="color-box" style="background: #555;"></div> Cavedio Tecnico ispezionabile retro NJ</div>
         </div>
-
         <div class="cartiglio">
             <strong>VARIANTE PEDEMONTANA DELLE MARCHE</strong><br>
             <strong>OPERA:</strong> Galleria Sassoferrato (1.864 m)<br>
-            <strong>DISEGNO:</strong> Schema Planimetrico Rete Idrica<br>
-            <strong>MATERIALI:</strong> Acciaio Zincato / PEAD PN25
+            <strong>DISEGNO:</strong> Layout Integrato Idrico-SOS (Cavedio Tecnico)<br>
+            <strong>REQUISITI:</strong> Conforme D.Lgs 264/06 (Passo 150m)
         </div>
     </div>
 </div>
