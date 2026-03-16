@@ -2,139 +2,145 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Planimetria A1 - Rilevazione Incendi Cavo Termosensibile</title>
+    <title>Planimetria A1 - Sistema Rilevazione Incendi LHD</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #333; margin: 0; padding: 20px; }
         .a1-page { 
             width: 2380px; height: 1300px; background: white; margin: auto; 
             padding: 60px; box-shadow: 0 0 50px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;
         }
-        h1 { text-align: center; font-size: 44px; color: #1a3a5a; margin-bottom: 5px; }
+        h1 { text-align: center; font-size: 44px; color: #c0392b; margin-bottom: 5px; }
         h2 { text-align: center; font-size: 22px; color: #666; margin-bottom: 40px; }
 
         .plan-container { display: flex; align-items: center; justify-content: space-between; margin-top: 150px; }
 
         .area-esterna {
-            width: 250px; height: 550px; border: 2px dashed #999; background: #f0f0f0;
+            width: 280px; height: 500px; border: 2px dashed #999; background: #f9f9f9;
             display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px;
-            position: relative;
         }
 
         /* Galleria */
         .tunnel-section {
-            width: 1800px; height: 350px; background: #222; position: relative;
-            border-top: 10px solid #444; border-bottom: 10px solid #444;
-            overflow: visible;
+            width: 1800px; height: 350px; background: #1a1a1a; position: relative;
+            border-top: 12px solid #444; border-bottom: 12px solid #444;
         }
 
-        /* --- SISTEMA RILEVAZIONE INCENDI (CAVO TERMOSENSIBILE) --- */
+        /* --- SISTEMA CAVO TERMOSENSIBILE (LHD) --- */
         .heat-cable {
             position: absolute;
             width: 100%;
-            height: 2px;
-            border-top: 3px dashed #ff3300;
+            height: 0;
+            border-top: 4px dashed #ff4400;
             z-index: 10;
-            filter: drop-shadow(0 0 5px #ff0000);
+            filter: drop-shadow(0 0 8px rgba(255, 68, 0, 0.8));
         }
-        .cable-1 { top: 40px; } /* Posizionato in calotta lato DX */
-        .cable-2 { bottom: 40px; } /* Posizionato in calotta lato SX */
+        .cable-left { top: 60px; } 
+        .cable-right { bottom: 60px; }
         
-        .control-unit {
-            width: 40px; height: 40px; background: #ff3300; color: white;
-            font-size: 10px; font-weight: bold; display: flex; align-items: center;
-            text-align: center; border: 2px solid #fff; border-radius: 4px;
+        /* Scatole di derivazione/fine linea */
+        .lhd-box {
+            position: absolute; width: 15px; height: 15px; background: #ff4400;
+            border: 1px solid white; border-radius: 3px;
         }
 
-        /* Piazzole di Sosta */
+        /* Unità di Interfaccia (Centraline) */
+        .interface-unit {
+            padding: 15px; background: #c0392b; color: white; border-radius: 5px;
+            font-weight: bold; text-align: center; border: 2px solid #333;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+        }
+
+        /* Piazzole e SOS (Riferimenti di posizione) */
         .piazzola {
-            position: absolute; width: 120px; height: 60px; background: #555;
-            border: 2px solid #888; display: flex; align-items: center; justify-content: center;
-            color: #ffeb3b; font-weight: bold; font-size: 14px; text-align: center;
+            position: absolute; width: 120px; height: 60px; background: #444;
+            border: 2px solid #666; display: flex; align-items: center; justify-content: center;
+            color: #ffeb3b; font-weight: bold; font-size: 14px;
         }
-        .p-top { top: -75px; border-bottom: none; border-radius: 10px 10px 0 0; }
-        .p-bottom { bottom: -75px; border-top: none; border-radius: 0 0 10px 10px; }
+        .p-top { top: -75px; border-radius: 10px 10px 0 0; }
+        .p-bottom { bottom: -75px; border-radius: 0 0 10px 10px; }
 
-        .quadro-bypass { width: 15px; height: 15px; background: #27ae60; margin-left: 5px; border: 1px solid #fff; }
+        .sos-station { 
+            position: absolute; width: 30px; height: 35px; background: #e67e22; 
+            border: 1px solid white; color: white; font-size: 10px; 
+            display: flex; align-items: center; justify-content: center; font-weight: bold;
+        }
+        .sos-top { top: 10px; }
+        .sos-bottom { bottom: 10px; }
 
-        /* Kilometriche SOS */
-        .km-label { color: #ffffff; font-size: 14px; font-weight: bold; position: absolute; white-space: nowrap; }
-        .km-top { top: 15px; }
-        .km-bottom { bottom: 15px; }
+        .km-label { color: #888; font-size: 12px; position: absolute; white-space: nowrap; }
 
-        /* Icone SOS e Naspi */
-        .station { position: absolute; width: 40px; text-align: center; z-index: 20; }
-        .sos-icon { width: 25px; height: 30px; background: #e67e22; border: 1px solid #fff; border-radius: 2px; margin: auto; color: white; font-size: 9px; line-height: 30px; font-weight: bold; }
-        .naspo-red { width: 10px; height: 10px; background: #c0392b; border-radius: 50%; margin: 3px auto; border: 1px solid #fff; }
-
-        .pos-top { top: -110px; }
-        .pos-bottom { bottom: -110px; }
-
-        /* Rete Idrica */
-        .pipe { position: absolute; width: 100%; height: 6px; z-index: 5; }
-        .steel-pipe { background: #bdc3c7; top: 10px; }
-
-        .legend { border: 2px solid #000; padding: 20px; background: #fdfdfd; width: 1100px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; font-size: 16px; }
-        .legend-item { display: flex; align-items: center; }
-        .cartiglio { border: 2px solid #000; width: 500px; padding: 20px; font-size: 18px; background: #eee; }
+        .legend { border: 2px solid #000; padding: 25px; background: #fff; width: 1000px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .legend-item { display: flex; align-items: center; font-size: 18px; }
+        .cartiglio { border: 2px solid #000; width: 550px; padding: 20px; font-size: 18px; background: #f2f2f2; }
     </style>
 </head>
 <body>
 
 <div class="a1-page">
-    <h1>PLANIMETRIA DI SICUREZZA: RILEVAZIONE INCENDI E RETE IDRICA</h1>
-    <h2>Galleria Sassoferrato (1.864 m) - Sistema a Cavo Termosensibile LHD</h2>
+    <h1>SISTEMA DI RILEVAZIONE INCENDI LINEARE</h1>
+    <h2>Galleria Sassoferrato (1.864 m) - Configurazione Cavo Termosensibile</h2>
 
     <div class="plan-container">
         <div class="area-esterna">
-            <div class="control-unit">LHD UNIT 1</div>
-            <div style="background:#c0392b; color:white; padding:10px; font-size: 12px;">IDRANTE ESTERNO</div>
-            <small>KM 0+000 (SUD)</small>
+            <div class="interface-unit">CENTRALINA LHD<br>MASTER - ZONE 1/2</div>
+            <div style="font-size: 14px; color: #666;">Locali Tecnici Sud</div>
+            <strong>KM 0+000</strong>
         </div>
 
         <div class="tunnel-section">
-            <div class="pipe steel-pipe"></div>
+            <div class="heat-cable cable-left"></div>
+            <div class="heat-cable cable-right"></div>
+
+            <div class="lhd-box" style="left: 0; top: 55px;"></div>
+            <div class="lhd-box" style="left: 600px; top: 55px;"></div>
+            <div class="lhd-box" style="left: 1200px; top: 55px;"></div>
+            <div class="lhd-box" style="left: 1790px; top: 55px;"></div>
+
+            <div class="piazzola p-top" style="left: 450px;">PIAZZOLA 1</div>
+            <div class="piazzola p-bottom" style="left: 900px;">PIAZZOLA 2</div>
+            <div class="piazzola p-top" style="left: 1350px;">PIAZZOLA 3</div>
+
+            <div class="sos-station sos-top" style="left: 150px;">SOS</div>
+            <div class="sos-station sos-bottom" style="left: 300px;">SOS</div>
+            <div class="sos-station sos-top" style="left: 600px;">SOS</div>
+            <div class="sos-station sos-bottom" style="left: 750px;">SOS</div>
+            <div class="sos-station sos-top" style="left: 1050px;">SOS</div>
             
-            <div class="heat-cable cable-1"></div>
-            <div class="heat-cable cable-2"></div>
-
-            <div class="piazzola p-top" style="left: 300px;">P1<br>0+300 <div class="quadro-bypass"></div></div>
-            <div class="piazzola p-top" style="left: 900px;">P3<br>0+900 <div class="quadro-bypass"></div></div>
-            <div class="piazzola p-top" style="left: 1500px;">P5<br>1+500 <div class="quadro-bypass"></div></div>
-
-            <div class="piazzola p-bottom" style="left: 600px;">P2<br>0+600 <div class="quadro-bypass"></div></div>
-            <div class="piazzola p-bottom" style="left: 1200px;">P4<br>1+200 <div class="quadro-bypass"></div></div>
-            <div class="piazzola p-bottom" style="left: 1700px;">P6<br>1+800 <div class="quadro-bypass"></div></div>
-
-            <div class="station pos-top" style="left: 150px;"><div class="sos-icon">SOS</div><div class="naspo-red"></div></div>
-            <div class="km-label km-top" style="left: 150px;">KM 0+150</div>
-
-            <div class="station pos-bottom" style="left: 450px;"><div class="sos-icon">SOS</div><div class="naspo-red"></div></div>
-            <div class="km-label km-bottom" style="left: 450px;">KM 0+450</div>
-
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.1); font-size: 60px; font-weight: bold;">CARREGGIATA</div>
+            <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.05); font-size: 80px; font-weight: bold; letter-spacing: 20px;">TUNNEL</div>
         </div>
 
         <div class="area-esterna">
-            <div class="control-unit">LHD UNIT 2</div>
-            <div style="border: 2px solid #2980b9; padding:15px; background: #d6eaf8;">CENTRALE ANTINCENDIO</div>
-            <small>KM 1+864 (NORD)</small>
+            <div class="interface-unit">UNITÀ DI FINE LINEA<br>TEST UNIT</div>
+            <div style="font-size: 14px; color: #666;">Locali Tecnici Nord</div>
+            <strong>KM 1+864</strong>
         </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; margin-top: 150px; padding: 20px; border-top: 4px solid #1a3a5a;">
+    <div style="display: flex; justify-content: space-between; margin-top: 180px; padding: 20px; border-top: 5px solid #c0392b;">
         <div class="legend">
-            <div class="legend-item"><div style="width:30px; border-top:3px dashed #ff3300; margin-right:10px;"></div> Cavo Termosensibile (Rilevazione Incendi)</div>
-            <div class="legend-item"><div style="width:20px; height:20px; background:#ff3300; border:1px solid #fff; margin-right:10px;"></div> Unità Interfaccia LHD</div>
-            <div class="legend-item"><div style="width:20px; height:20px; background:#e67e22; margin-right:10px;"></div> Colonnina SOS / Postazione Naspo</div>
-            <div class="legend-item"><div style="width:30px; height:6px; background:#bdc3c7; margin-right:10px;"></div> Tubazione Principale Idrica Acciaio</div>
-            <div class="legend-item"><div style="width:20px; height:20px; background:#555; border:1px solid #ffeb3b; margin-right:10px;"></div> Piazzola di Sosta (ogni 300m)</div>
-            <div class="legend-item"><div style="width:20px; height:20px; background:#27ae60; margin-right:10px;"></div> Quadro Elettrico / Bypass</div>
+            <div class="legend-item">
+                <div style="width:40px; border-top:4px dashed #ff4400; margin-right:15px; filter: drop-shadow(0 0 3px #ff4400);"></div> 
+                Cavo Termosensibile ad alta sensibilità (LHD)
+            </div>
+            <div class="legend-item">
+                <div style="width:25px; height:25px; background:#c0392b; margin-right:15px; border-radius:3px;"></div> 
+                Centrale di Controllo / Interfaccia zone
+            </div>
+            <div class="legend-item">
+                <div style="width:25px; height:25px; background:#ff4400; border:1px solid white; margin-right:15px;"></div> 
+                Scatola di derivazione / Sensore di fine linea
+            </div>
+            <div class="legend-item">
+                <div style="width:25px; height:25px; background:#e67e22; margin-right:15px;"></div> 
+                Postazione SOS (Riferimento per allarme manuale)
+            </div>
         </div>
+
         <div class="cartiglio">
-            <strong>PEDEMONTANA DELLE MARCHE</strong><br>
-            <strong>IMPIANTI:</strong> Rilevazione Fumi/Calore e Antincendio Idrico<br>
-            <strong>GALLERIA:</strong> Sassoferrato (L = 1.864 m)<br>
-            <strong>SISTEMA LHD:</strong> Cavo a micro-variazione di impedenza/resistenza
+            <strong>PROGETTO:</strong> Impianto di Rilevazione Incendi Automatica<br>
+            <strong>TECNOLOGIA:</strong> Cavo a micro-variazione di resistenza (Linear Heat Detection)<br>
+            <strong>COMMITTENTE:</strong> Pedemontana delle Marche<br>
+            <strong>SCALA:</strong> N.T.S. (Planimetria A1 Integrata)
         </div>
     </div>
 </div>
