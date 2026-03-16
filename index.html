@@ -2,145 +2,139 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Planimetria A1 - Sistema Rilevazione Incendi LHD</title>
+    <title>Planimetria A1 - Sistemi Fibra Ottica e CCTV (DLgs 264)</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #333; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #2c3e50; margin: 0; padding: 20px; }
         .a1-page { 
             width: 2380px; height: 1300px; background: white; margin: auto; 
             padding: 60px; box-shadow: 0 0 50px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;
         }
-        h1 { text-align: center; font-size: 44px; color: #c0392b; margin-bottom: 5px; }
-        h2 { text-align: center; font-size: 22px; color: #666; margin-bottom: 40px; }
+        h1 { text-align: center; font-size: 44px; color: #2980b9; margin-bottom: 5px; }
+        h2 { text-align: center; font-size: 20px; color: #7f8c8d; margin-bottom: 40px; }
 
-        .plan-container { display: flex; align-items: center; justify-content: space-between; margin-top: 150px; }
+        .plan-container { display: flex; align-items: center; justify-content: space-between; margin-top: 180px; }
 
-        .area-esterna {
-            width: 280px; height: 500px; border: 2px dashed #999; background: #f9f9f9;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px;
+        /* Aree Esterne / Locali Tecnici */
+        .locale-tecnico {
+            width: 300px; height: 500px; border: 3px solid #34495e; background: #ecf0f1;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px;
         }
 
         /* Galleria */
         .tunnel-section {
-            width: 1800px; height: 350px; background: #1a1a1a; position: relative;
-            border-top: 12px solid #444; border-bottom: 12px solid #444;
+            width: 1700px; height: 380px; background: #111; position: relative;
+            border-top: 15px solid #333; border-bottom: 15px solid #333;
         }
 
-        /* --- SISTEMA CAVO TERMOSENSIBILE (LHD) --- */
-        .heat-cable {
-            position: absolute;
-            width: 100%;
-            height: 0;
-            border-top: 4px dashed #ff4400;
-            z-index: 10;
-            filter: drop-shadow(0 0 8px rgba(255, 68, 0, 0.8));
+        /* --- DORSALI FIBRA OTTICA --- */
+        .fiber { position: absolute; width: 100%; height: 4px; z-index: 10; }
+        /* Fibra Dati (Automazione) */
+        .fiber-data { top: 20px; background: #2ecc71; box-shadow: 0 0 5px #2ecc71; } 
+        /* Fibra Fonia (SOS/Radio) */
+        .fiber-voice { top: 35px; background: #f1c40f; box-shadow: 0 0 5px #f1c40f; }
+        /* Fibra Video (CCTV) */
+        .fiber-video { top: 50px; background: #3498db; box-shadow: 0 0 5px #3498db; }
+
+        /* --- TELECAMERE (CCTV / AID) --- */
+        .camera-node {
+            position: absolute; width: 25px; height: 25px; background: #fff;
+            clip-path: polygon(0% 0%, 100% 0%, 80% 50%, 100% 100%, 0% 100%);
+            border: 1px solid #333;
         }
-        .cable-left { top: 60px; } 
-        .cable-right { bottom: 60px; }
-        
-        /* Scatole di derivazione/fine linea */
-        .lhd-box {
-            position: absolute; width: 15px; height: 15px; background: #ff4400;
-            border: 1px solid white; border-radius: 3px;
+        .cam-top { top: 70px; transform: rotate(-20deg); }
+        .cam-label { color: #3498db; font-size: 11px; position: absolute; top: 100px; font-weight: bold; }
+
+        /* Switch di Campo (Armadi Rack) */
+        .switch-box {
+            position: absolute; width: 40px; height: 40px; background: #95a5a6;
+            border: 2px solid #fff; bottom: 20px; z-index: 15;
+            display: flex; align-items: center; justify-content: center; font-size: 10px; color: white;
         }
 
-        /* Unità di Interfaccia (Centraline) */
-        .interface-unit {
-            padding: 15px; background: #c0392b; color: white; border-radius: 5px;
-            font-weight: bold; text-align: center; border: 2px solid #333;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-        }
-
-        /* Piazzole e SOS (Riferimenti di posizione) */
+        /* Piazzole (Riferimento) */
         .piazzola {
-            position: absolute; width: 120px; height: 60px; background: #444;
-            border: 2px solid #666; display: flex; align-items: center; justify-content: center;
-            color: #ffeb3b; font-weight: bold; font-size: 14px;
+            position: absolute; width: 150px; height: 50px; background: #333;
+            border: 2px solid #555; bottom: -65px; color: #fff;
+            display: flex; align-items: center; justify-content: center; font-size: 14px;
         }
-        .p-top { top: -75px; border-radius: 10px 10px 0 0; }
-        .p-bottom { bottom: -75px; border-radius: 0 0 10px 10px; }
 
-        .sos-station { 
-            position: absolute; width: 30px; height: 35px; background: #e67e22; 
-            border: 1px solid white; color: white; font-size: 10px; 
-            display: flex; align-items: center; justify-content: center; font-weight: bold;
-        }
-        .sos-top { top: 10px; }
-        .sos-bottom { bottom: 10px; }
-
-        .km-label { color: #888; font-size: 12px; position: absolute; white-space: nowrap; }
-
-        .legend { border: 2px solid #000; padding: 25px; background: #fff; width: 1000px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .legend-item { display: flex; align-items: center; font-size: 18px; }
-        .cartiglio { border: 2px solid #000; width: 550px; padding: 20px; font-size: 18px; background: #f2f2f2; }
+        .legend { border: 2px solid #000; padding: 25px; background: #fdfdfd; width: 1100px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .cartiglio { border: 2px solid #000; width: 550px; padding: 20px; font-size: 18px; background: #eee; }
+        
+        .fiber-line { width: 40px; height: 5px; margin-right: 15px; }
     </style>
 </head>
 <body>
 
 <div class="a1-page">
-    <h1>SISTEMA DI RILEVAZIONE INCENDI LINEARE</h1>
-    <h2>Galleria Sassoferrato (1.864 m) - Configurazione Cavo Termosensibile</h2>
+    <h1>IMPIANTI DI COMUNICAZIONE E VIDEOSORVEGLIANZA (AID)</h1>
+    <h2>Galleria Sassoferrato - Conformità DLgs 264/06: Infrastruttura Fibra Ottica Ridondata</h2>
 
     <div class="plan-container">
-        <div class="area-esterna">
-            <div class="interface-unit">CENTRALINA LHD<br>MASTER - ZONE 1/2</div>
-            <div style="font-size: 14px; color: #666;">Locali Tecnici Sud</div>
+        <div class="locale-tecnico">
+            <div style="background:#2c3e50; color:white; padding:10px; width:80%; text-align:center;">SERVER ROOM SUD</div>
+            <div style="font-size:12px; border:1px solid #7f8c8d; padding:5px;">CORE SWITCH 10Gbps</div>
             <strong>KM 0+000</strong>
         </div>
 
         <div class="tunnel-section">
-            <div class="heat-cable cable-left"></div>
-            <div class="heat-cable cable-right"></div>
+            <div class="fiber fiber-data"></div>
+            <div class="fiber fiber-voice"></div>
+            <div class="fiber fiber-video"></div>
 
-            <div class="lhd-box" style="left: 0; top: 55px;"></div>
-            <div class="lhd-box" style="left: 600px; top: 55px;"></div>
-            <div class="lhd-box" style="left: 1200px; top: 55px;"></div>
-            <div class="lhd-box" style="left: 1790px; top: 55px;"></div>
+            <div style="position:absolute; left:150px;" class="cam-top"><div class="camera-node"></div><span class="cam-label">CAM.01</span></div>
+            <div style="position:absolute; left:450px;" class="cam-top"><div class="camera-node"></div><span class="cam-label">CAM.02</span></div>
+            <div style="position:absolute; left:750px;" class="cam-top"><div class="camera-node"></div><span class="cam-label">CAM.03 (AID)</span></div>
+            <div style="position:absolute; left:1050px;" class="cam-top"><div class="camera-node"></div><span class="cam-label">CAM.04</span></div>
+            <div style="position:absolute; left:1350px;" class="cam-top"><div class="camera-node"></div><span class="cam-label">CAM.05</span></div>
+            <div style="position:absolute; left:1650px;" class="cam-top"><div class="camera-node"></div><span class="cam-label">CAM.06 (AID)</span></div>
 
-            <div class="piazzola p-top" style="left: 450px;">PIAZZOLA 1</div>
-            <div class="piazzola p-bottom" style="left: 900px;">PIAZZOLA 2</div>
-            <div class="piazzola p-top" style="left: 1350px;">PIAZZOLA 3</div>
+            <div class="switch-box" style="left: 450px;">RACK 1</div>
+            <div class="switch-box" style="left: 1050px;">RACK 2</div>
+            <div class="switch-box" style="left: 1550px;">RACK 3</div>
 
-            <div class="sos-station sos-top" style="left: 150px;">SOS</div>
-            <div class="sos-station sos-bottom" style="left: 300px;">SOS</div>
-            <div class="sos-station sos-top" style="left: 600px;">SOS</div>
-            <div class="sos-station sos-bottom" style="left: 750px;">SOS</div>
-            <div class="sos-station sos-top" style="left: 1050px;">SOS</div>
-            
-            <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.05); font-size: 80px; font-weight: bold; letter-spacing: 20px;">TUNNEL</div>
+            <div style="position: absolute; bottom: 20px; left: 50%; color: #444; font-weight: bold; font-size: 20px;">VANO TECNICO SOTTO-MARCIAPIEDE / PASSAGGIO CAVI</div>
         </div>
 
-        <div class="area-esterna">
-            <div class="interface-unit">UNITÀ DI FINE LINEA<br>TEST UNIT</div>
-            <div style="font-size: 14px; color: #666;">Locali Tecnici Nord</div>
+        <div class="locale-tecnico">
+            <div style="background:#2c3e50; color:white; padding:10px; width:80%; text-align:center;">SERVER ROOM NORD</div>
+            <div style="font-size:12px; border:1px solid #7f8c8d; padding:5px;">BACKUP SWITCH</div>
             <strong>KM 1+864</strong>
         </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; margin-top: 180px; padding: 20px; border-top: 5px solid #c0392b;">
+    <div style="display: flex; justify-content: space-between; margin-top: 150px; padding: 20px; border-top: 5px solid #2980b9;">
         <div class="legend">
-            <div class="legend-item">
-                <div style="width:40px; border-top:4px dashed #ff4400; margin-right:15px; filter: drop-shadow(0 0 3px #ff4400);"></div> 
-                Cavo Termosensibile ad alta sensibilità (LHD)
+            <div style="display:flex; align-items:center;">
+                <div class="fiber-line" style="background:#2ecc71;"></div> 
+                <span><strong>Fibra Dati (Verde):</strong> PLC e Automazione Impianti</span>
             </div>
-            <div class="legend-item">
-                <div style="width:25px; height:25px; background:#c0392b; margin-right:15px; border-radius:3px;"></div> 
-                Centrale di Controllo / Interfaccia zone
+            <div style="display:flex; align-items:center;">
+                <div class="fiber-line" style="background:#f1c40f;"></div> 
+                <span><strong>Fibra Fonia (Giallo):</strong> SOS e Sistema Radio Isocanale</span>
             </div>
-            <div class="legend-item">
-                <div style="width:25px; height:25px; background:#ff4400; border:1px solid white; margin-right:15px;"></div> 
-                Scatola di derivazione / Sensore di fine linea
+            <div style="display:flex; align-items:center;">
+                <div class="fiber-line" style="background:#3498db;"></div> 
+                <span><strong>Fibra Video (Blu):</strong> Telecamere e Sistemi AID</span>
             </div>
-            <div class="legend-item">
-                <div style="width:25px; height:25px; background:#e67e22; margin-right:15px;"></div> 
-                Postazione SOS (Riferimento per allarme manuale)
+            <div style="display:flex; align-items:center;">
+                <div style="width:25px; height:20px; background:#fff; border:1px solid #333; margin-right:15px;"></div> 
+                <span>Telecamera IP con Analisi Video Integrata</span>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <div style="width:25px; height:25px; background:#95a5a6; border:1px solid #fff; margin-right:15px;"></div> 
+                <span>Armadio Rack / Switch di Campo Industriale</span>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <span style="color:#e74c3c;"><strong>Nota:</strong> Posa in condotti separati o compartimentati</span>
             </div>
         </div>
 
         <div class="cartiglio">
-            <strong>PROGETTO:</strong> Impianto di Rilevazione Incendi Automatica<br>
-            <strong>TECNOLOGIA:</strong> Cavo a micro-variazione di resistenza (Linear Heat Detection)<br>
-            <strong>COMMITTENTE:</strong> Pedemontana delle Marche<br>
-            <strong>SCALA:</strong> N.T.S. (Planimetria A1 Integrata)
+            <strong>PEDEMONTANA DELLE MARCHE</strong><br>
+            <strong>PROGETTO:</strong> Infrastruttura Digitale e Video-Controllo<br>
+            <strong>NORMATIVA:</strong> DLgs 264/06 (Sicurezza Gallerie > 500m)<br>
+            <strong>TECNOLOGIA:</strong> Singolo Modo (SM) 9/125µm - Protocollo TCP/IP
         </div>
     </div>
 </div>
