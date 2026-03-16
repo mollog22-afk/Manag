@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Planimetria A1 - Piazzole, SOS e Rete Idrica Integrata</title>
+    <title>Planimetria A1 - Rilevazione Incendi Cavo Termosensibile</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #333; margin: 0; padding: 20px; }
         .a1-page { 
@@ -16,13 +16,33 @@
 
         .area-esterna {
             width: 250px; height: 550px; border: 2px dashed #999; background: #f0f0f0;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 30px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px;
+            position: relative;
         }
 
         /* Galleria */
         .tunnel-section {
             width: 1800px; height: 350px; background: #222; position: relative;
             border-top: 10px solid #444; border-bottom: 10px solid #444;
+            overflow: visible;
+        }
+
+        /* --- SISTEMA RILEVAZIONE INCENDI (CAVO TERMOSENSIBILE) --- */
+        .heat-cable {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            border-top: 3px dashed #ff3300;
+            z-index: 10;
+            filter: drop-shadow(0 0 5px #ff0000);
+        }
+        .cable-1 { top: 40px; } /* Posizionato in calotta lato DX */
+        .cable-2 { bottom: 40px; } /* Posizionato in calotta lato SX */
+        
+        .control-unit {
+            width: 40px; height: 40px; background: #ff3300; color: white;
+            font-size: 10px; font-weight: bold; display: flex; align-items: center;
+            text-align: center; border: 2px solid #fff; border-radius: 4px;
         }
 
         /* Piazzole di Sosta */
@@ -34,10 +54,9 @@
         .p-top { top: -75px; border-bottom: none; border-radius: 10px 10px 0 0; }
         .p-bottom { bottom: -75px; border-top: none; border-radius: 0 0 10px 10px; }
 
-        /* Simbolo Quadro Bypass in Piazzola */
         .quadro-bypass { width: 15px; height: 15px; background: #27ae60; margin-left: 5px; border: 1px solid #fff; }
 
-        /* Kilometriche SOS (Testo Bianco) */
+        /* Kilometriche SOS */
         .km-label { color: #ffffff; font-size: 14px; font-weight: bold; position: absolute; white-space: nowrap; }
         .km-top { top: 15px; }
         .km-bottom { bottom: 15px; }
@@ -52,28 +71,32 @@
 
         /* Rete Idrica */
         .pipe { position: absolute; width: 100%; height: 6px; z-index: 5; }
-        .steel-pipe { background: #bdc3c7; top: 5px; }
+        .steel-pipe { background: #bdc3c7; top: 10px; }
 
         .legend { border: 2px solid #000; padding: 20px; background: #fdfdfd; width: 1100px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; font-size: 16px; }
+        .legend-item { display: flex; align-items: center; }
         .cartiglio { border: 2px solid #000; width: 500px; padding: 20px; font-size: 18px; background: #eee; }
     </style>
 </head>
 <body>
 
 <div class="a1-page">
-    <h1>PLANIMETRIA GENERALE DI SICUREZZA: PIAZZOLE, SOS E RETE IDRICA</h1>
-    <h2>Galleria Sassoferrato (1.864 m) - Sviluppo Kilometrico e Disposizione Piazzole ogni 300m</h2>
+    <h1>PLANIMETRIA DI SICUREZZA: RILEVAZIONE INCENDI E RETE IDRICA</h1>
+    <h2>Galleria Sassoferrato (1.864 m) - Sistema a Cavo Termosensibile LHD</h2>
 
     <div class="plan-container">
         <div class="area-esterna">
-            <div style="background:#c0392b; color:white; padding:10px;">UNI 70</div>
-            <div style="background:#c0392b; color:white; padding:10px;">UNI 70</div>
-            <small>KM 0+000</small>
+            <div class="control-unit">LHD UNIT 1</div>
+            <div style="background:#c0392b; color:white; padding:10px; font-size: 12px;">IDRANTE ESTERNO</div>
+            <small>KM 0+000 (SUD)</small>
         </div>
 
         <div class="tunnel-section">
             <div class="pipe steel-pipe"></div>
             
+            <div class="heat-cable cable-1"></div>
+            <div class="heat-cable cable-2"></div>
+
             <div class="piazzola p-top" style="left: 300px;">P1<br>0+300 <div class="quadro-bypass"></div></div>
             <div class="piazzola p-top" style="left: 900px;">P3<br>0+900 <div class="quadro-bypass"></div></div>
             <div class="piazzola p-top" style="left: 1500px;">P5<br>1+500 <div class="quadro-bypass"></div></div>
@@ -88,36 +111,30 @@
             <div class="station pos-bottom" style="left: 450px;"><div class="sos-icon">SOS</div><div class="naspo-red"></div></div>
             <div class="km-label km-bottom" style="left: 450px;">KM 0+450</div>
 
-            <div class="station pos-top" style="left: 750px;"><div class="sos-icon">SOS</div><div class="naspo-red"></div></div>
-            <div class="km-label km-top" style="left: 750px;">KM 0+750</div>
-
-            <div class="station pos-bottom" style="left: 1050px;"><div class="sos-icon">SOS</div><div class="naspo-red"></div></div>
-            <div class="km-label km-bottom" style="left: 1050px;">KM 1+050</div>
-
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.15); font-size: 60px; font-weight: bold;">CARREGGIATA</div>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.1); font-size: 60px; font-weight: bold;">CARREGGIATA</div>
         </div>
 
         <div class="area-esterna">
-            <div style="border: 2px solid #2980b9; padding:15px; background: #d6eaf8;">VASCA + POMPE</div>
-            <div style="background:#c0392b; color:white; padding:10px;">UNI 70</div>
-            <small>KM 1+864</small>
+            <div class="control-unit">LHD UNIT 2</div>
+            <div style="border: 2px solid #2980b9; padding:15px; background: #d6eaf8;">CENTRALE ANTINCENDIO</div>
+            <small>KM 1+864 (NORD)</small>
         </div>
     </div>
 
     <div style="display: flex; justify-content: space-between; margin-top: 150px; padding: 20px; border-top: 4px solid #1a3a5a;">
         <div class="legend">
+            <div class="legend-item"><div style="width:30px; border-top:3px dashed #ff3300; margin-right:10px;"></div> Cavo Termosensibile (Rilevazione Incendi)</div>
+            <div class="legend-item"><div style="width:20px; height:20px; background:#ff3300; border:1px solid #fff; margin-right:10px;"></div> Unità Interfaccia LHD</div>
+            <div class="legend-item"><div style="width:20px; height:20px; background:#e67e22; margin-right:10px;"></div> Colonnina SOS / Postazione Naspo</div>
+            <div class="legend-item"><div style="width:30px; height:6px; background:#bdc3c7; margin-right:10px;"></div> Tubazione Principale Idrica Acciaio</div>
             <div class="legend-item"><div style="width:20px; height:20px; background:#555; border:1px solid #ffeb3b; margin-right:10px;"></div> Piazzola di Sosta (ogni 300m)</div>
-            <div class="legend-item"><div style="width:20px; height:20px; background:#27ae60; margin-right:10px;"></div> Quadro Bypass / Pressurizzazione</div>
-            <div class="legend-item"><div style="width:20px; height:20px; background:#e67e22; margin-right:10px;"></div> Colonnina SOS (ogni 150m sfalsata)</div>
-            <div class="legend-item"><div style="width:20px; height:10px; background:#bdc3c7; margin-right:10px;"></div> Tubazione Acciaio Zincato (Cavedio)</div>
-            <div class="legend-item"><div style="width:20px; height:20px; background:#c0392b; margin-right:10px;"></div> Idrante UNI 70 / Naspo UNI 45</div>
-            <div class="legend-item"><strong style="color:#ffffff; background:#333; padding:2px;">KM X+XXX</strong> Kilometrica SOS (Testo Bianco)</div>
+            <div class="legend-item"><div style="width:20px; height:20px; background:#27ae60; margin-right:10px;"></div> Quadro Elettrico / Bypass</div>
         </div>
         <div class="cartiglio">
             <strong>PEDEMONTANA DELLE MARCHE</strong><br>
+            <strong>IMPIANTI:</strong> Rilevazione Fumi/Calore e Antincendio Idrico<br>
             <strong>GALLERIA:</strong> Sassoferrato (L = 1.864 m)<br>
-            <strong>DISEGNO:</strong> Planimetria Generale di Sicurezza A1<br>
-            <strong>KILOMETRICHE:</strong> Riferite all'asse stradale
+            <strong>SISTEMA LHD:</strong> Cavo a micro-variazione di impedenza/resistenza
         </div>
     </div>
 </div>
